@@ -1,4 +1,3 @@
-import "./App.css";
 import React, { Suspense } from "react";
 
 const RemotePortfolioApp = React.lazy(() => import("portfolio/PortfolioApp"));
