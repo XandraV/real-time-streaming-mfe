@@ -1,14 +1,13 @@
 {
-  "name": "real-time-streaming-mfe",
+  "name": "mock-ws-server",
+  "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "shell",
-    "portfolio-mfe",
-    "trade-mfe"
-  ],
+  "scripts": {
+    "start:mock": "ts-node ./server.ts"
+  },
   "dependencies": {
-    "protobufjs": "^7.5.3",
-    "ws": "^8.18.2"
+    "ws": "^8.18.2",
+    "protobufjs": "^7.5.3"
   },
   "devDependencies": {
     "@types/node": "^24.0.3",
