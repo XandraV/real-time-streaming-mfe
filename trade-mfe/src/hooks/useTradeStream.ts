@@ -11,31 +11,34 @@ const useTradeStream = () => {
   useEffect(() => {
     let isMounted = true;
     let tradeType: protobuf.Type;
+    let tradeBatchType: protobuf.Type;
 
     protobuf.load(tradeProtoUrl).then((root) => {
       if (!isMounted) return;
-      tradeType = root.lookupType("Trade");
-
-      // Only create one socket
+      // tradeType = root.lookupType("Trade");
+      tradeBatchType = root.lookupType("TradeBatch");
       const socket = new WebSocket("ws://localhost:4000");
       socketRef.current = socket;
 
       socket.onopen = () => console.log("WebSocket connected");
 
       socket.onmessage = async (event) => {
-        if (!tradeType) return;
+        if (!tradeBatchType) return;
         const buffer = await event.data.arrayBuffer();
-        const message = tradeType.decode(new Uint8Array(buffer));
-        const row = tradeType.toObject(message, {
+        const message = tradeBatchType.decode(new Uint8Array(buffer));
+        const batch = tradeBatchType.toObject(message, {
           longs: String,
           enums: String,
           bytes: String,
         });
-       // console.log("💬 Received new message: ", row);
-        setRowsMap((prev) => ({
-          ...prev,
-          [row.ticker]: row,
-        }));
+        console.log("💬 Received new message: ", batch);
+        setRowsMap((prev) => {
+          const updated = { ...prev };
+          for (const row of batch.trades) {
+            updated[row.ticker] = row;
+          }
+          return updated;
+        });
       };
 
       socket.onerror = (err) => console.error("WebSocket error", err);

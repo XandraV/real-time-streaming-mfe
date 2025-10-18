@@ -5,7 +5,6 @@ function App() {
   const trades = useTradeStream();
   return (
     <>
-      <div>TRADE APP</div>
       <TradeGrid rowsMap={trades} />
     </>
   );

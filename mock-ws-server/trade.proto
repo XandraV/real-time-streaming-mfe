@@ -9,3 +9,7 @@ message Trade {
   float price = 6;
   repeated float timeline = 7;
 }
+
+message TradeBatch {
+  repeated Trade trades = 1;
+}
