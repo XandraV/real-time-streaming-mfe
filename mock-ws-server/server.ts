@@ -3,6 +3,7 @@ import WebSocket, { WebSocketServer } from "ws";
 import path from "path";
 import fs from "fs";
 import protobuf from "protobufjs";
+import { data } from "./data";
 
 const PORT = 4000;
 
@@ -27,21 +28,24 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
   if (err || !maybeRoot) {
     throw err ?? new Error("Failed to load trade.proto");
   }
-  const root = maybeRoot; // now safely typed
+  const root = maybeRoot;
   const Trade = root.lookupType("Trade");
   wss.on("connection", (ws: WebSocket) => {
     console.log("🔗 Client connected");
     const interval = setInterval(() => {
+      const row = data[Math.floor(Math.random() * 54)];
+      // console.log("LENGTH", data.length);
       const payload = {
-        symbol: ["AAPL", "GOOG", "MSFT"][Math.floor(Math.random() * 3)],
+        ...row,
+        quantity: +(100 + Math.random() * 10).toFixed(2),
         price: +(100 + Math.random() * 100).toFixed(2),
-        volume: Math.floor(Math.random() * 500),
-        timestamp: Date.now(),
+        purchasePrice: Math.floor(Math.random() * 500).toFixed(2),
       };
+
       const message = Trade.create(payload);
       const buffer = Trade.encode(message).finish();
       ws.send(buffer);
-    }, 5000);
+    }, 1000);
 
     ws.on("close", () => {
       clearInterval(interval);
@@ -53,3 +57,6 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
 server.listen(PORT, () => {
   console.log(`✅ Mock WebSocket server running at ws://localhost:${PORT}`);
 });
+function getData() {
+  throw new Error("Function not implemented.");
+}

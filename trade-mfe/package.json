@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@originjs/vite-plugin-federation": "^1.4.1",
+    "ag-grid-enterprise": "^34.2.0",
+    "ag-grid-react": "^34.2.0",
     "concurrently": "^9.1.2",
     "protobufjs": "^7.5.3",
     "react": "^19.1.0",
