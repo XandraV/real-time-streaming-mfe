@@ -1,10 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import protobuf from "protobufjs";
-
-// @ts-ignore
 import tradeProtoUrl from "../proto/trade.proto?url";
 
-export function useTradeStream(onMessage: (data: any) => void) {
+export function useTradeStream() {
+  const [trades, setTrades] = useState<any[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -25,12 +24,12 @@ export function useTradeStream(onMessage: (data: any) => void) {
         if (!tradeType) return;
         const buffer = await event.data.arrayBuffer();
         const message = tradeType.decode(new Uint8Array(buffer));
-        const object = tradeType.toObject(message, {
+        const data = tradeType.toObject(message, {
           longs: String,
           enums: String,
           bytes: String,
         });
-        onMessage(object);
+        setTrades((prev) => [data, ...prev.slice(0, 20)]);
       };
 
       socket.onerror = (err) => console.error("WebSocket error", err);
@@ -43,5 +42,6 @@ export function useTradeStream(onMessage: (data: any) => void) {
         socketRef.current.close();
       }
     };
-  }, [onMessage]);
+  }, []);
+  return trades;
 }

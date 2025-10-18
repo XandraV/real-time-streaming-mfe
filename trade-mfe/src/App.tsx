@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import { useState, useCallback } from "react";
 import { useTradeStream } from "./hooks/useTradeStream";
 
 function App() {
-  const [trades, setTrades] = useState<any[]>([]);
-
-  useTradeStream((data) => {
-    setTrades((prev) => [data, ...prev.slice(0, 20)]);
-    console.log("New trade received:", data);
-  });
+  const trades = useTradeStream();
 
   return (
     <>
