@@ -41,7 +41,7 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
       const message = Trade.create(payload);
       const buffer = Trade.encode(message).finish();
       ws.send(buffer);
-    }, 1000);
+    }, 5000);
 
     ws.on("close", () => {
       clearInterval(interval);
