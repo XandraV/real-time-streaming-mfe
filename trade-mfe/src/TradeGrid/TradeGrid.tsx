@@ -5,10 +5,12 @@ import {
   type GetRowIdFunc,
   type GetRowIdParams,
   themeAlpine,
+  colorSchemeDarkBlue,
 } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import { colDefs, defaultColDef } from "./columnDef";
 import type { RowsMap } from "../types";
+import { StyledWrapper } from "./StyledWrapper";
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -31,17 +33,24 @@ const TradeGrid = ({ rowsMap }: GridProps) => {
     headerBackgroundColor: "#2b3340",
     headerColumnResizeHandleColor: "#4b525d",
   });
+  const myTheme2 = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
+    valueChangeValueHighlightBackgroundColor: "#823fcaa0",
+    valueChangeDeltaDownColor: "rgb(255, 0, 92)",
+    valueChangeDeltaUpColor: "rgb(53, 182, 90)",
+  });
 
   return (
-    <div style={{ height: 500 }}>
-      <AgGridReact
-        theme={myTheme}
-        rowData={Object.values(rowsMap)}
-        columnDefs={colDefs}
-        defaultColDef={defaultColDef}
-        getRowId={getRowId}
-      />
-    </div>
+    <StyledWrapper>
+      <div style={{ height: 900 }}>
+        <AgGridReact
+          theme={myTheme2}
+          rowData={Object.values(rowsMap)}
+          columnDefs={colDefs}
+          defaultColDef={defaultColDef}
+          getRowId={getRowId}
+        />
+      </div>
+    </StyledWrapper>
   );
 };
 

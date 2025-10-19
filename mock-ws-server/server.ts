@@ -38,7 +38,7 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
     ws.send(fullBuffer);
 
     const interval = setInterval(() => {
-      const count = Math.floor(Math.random() * data.length);
+      const count = Math.floor(3 + Math.random() * 30);
       const updates = Array.from({ length: count }).map(() => {
         const row = data[Math.floor(Math.random() * data.length)];
         return {
@@ -52,7 +52,7 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
       const message = TradeBatch.create({ trades: updates });
       const buffer = TradeBatch.encode(message).finish();
       ws.send(buffer);
-    }, 1000);
+    }, 500);
 
     ws.on("close", () => {
       clearInterval(interval);

@@ -151,7 +151,7 @@ export const TickerCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
       >
         <TradeLogo ticker={data.ticker} />
         <b className="custom-ticker">{data.ticker}</b>
-        <span className="ticker-name"> {data.name}</span>
+        {/* <span className="ticker-name"> {data.name}</span> */}
       </div>
     )
   );
