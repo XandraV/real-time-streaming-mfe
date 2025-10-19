@@ -21,32 +21,18 @@ export const colDefs: Array<ColDef> = [
   {
     field: "ticker",
     cellRenderer: TickerCellRenderer,
+    minWidth: 100,
   },
   {
-    headerName: "Timeline",
-    field: "timeline",
-    sortable: false,
-    filter: false,
-    // cellRenderer: "agSparklineCellRenderer",
-    cellRendererParams: {
-      sparklineOptions: {
-        type: "bar",
-        direction: "vertical",
-        axis: {
-          strokeWidth: 0,
-        },
-        //   tooltip: {
-        //     renderer: sparklineTooltipRenderer,
-        //   },
-      },
-    },
+    field: "name",
+    minWidth: 300,
   },
   {
     field: "instrument",
     cellDataType: "text",
     type: "rightAligned",
-    minWidth: 100,
-    initialWidth: 100,
+    minWidth: 80,
+    initialWidth: 80,
   },
   {
     colId: "p&l",

@@ -10,7 +10,7 @@ const useTradeStream = () => {
 
   useEffect(() => {
     let isMounted = true;
-    let tradeType: protobuf.Type;
+    //let tradeType: protobuf.Type;
     let tradeBatchType: protobuf.Type;
 
     protobuf.load(tradeProtoUrl).then((root) => {
