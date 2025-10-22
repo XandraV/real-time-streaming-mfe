@@ -1,25 +1,27 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { webSocket } from "rxjs/webSocket";
-import { map, tap, throttleTime } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
-import type { RowsMap } from "../types";
+import type { RowsMap, Trade } from "../types";
 
-const useTradeStreamRx = () => {
-  const [rowsMap, setRowsMap] = useState<RowsMap>({});
-  const rowsRef = useRef<RowsMap>({}); // mutable live store
-
+/**
+ * Streams trade data over WebSocket and calls onTrades() with new batches.
+ * Emits an array of trades each time new data arrives (not a map).
+ */
+const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
   useEffect(() => {
     let subscription: any;
 
     protobuf.load(tradeProtoUrl).then((root) => {
       const tradeBatchType = root.lookupType("TradeBatch");
-
       const socket$ = webSocket({
         url: "ws://localhost:4000",
         binaryType: "arraybuffer",
         deserializer: (e) => e.data,
       });
+
+      let rowsRef: RowsMap = {};
 
       const stream$ = socket$.pipe(
         map((data: ArrayBuffer) => {
@@ -29,31 +31,33 @@ const useTradeStreamRx = () => {
             enums: String,
             bytes: String,
           }) as any;
-          return trades;
+          return trades as Trade[];
         }),
-
-        // Update the ref synchronously (no React re-render)
         tap((trades) => {
-          trades.forEach((trade: any) => {
-            rowsRef.current[trade.ticker] = trade;
-          });
+          // update local snapshot
+          rowsRef = {};
+          trades.forEach((t) => (rowsRef[t.ticker] = t));
         }),
-
-        // Emit latest snapshot at most every 300ms
-        throttleTime(300, undefined, { leading: true, trailing: true }),
-        map(() => ({ ...rowsRef.current }))
+        // Throttle updates (optional)
+       // throttleTime(300, undefined, { leading: true, trailing: true }),
+        tap(() => {
+          // update local snapshot
+         console.log('hi ref', Object.values(rowsRef).length)
+        }),
+        map(() => Object.values(rowsRef)),
       );
 
       subscription = stream$.subscribe({
-        next: (snapshot) => setRowsMap(snapshot),
+        next: (trades: Trade[]) => {
+          onTrades?.(trades);
+        },
         error: (err) => console.error("WebSocket error", err),
       });
     });
 
-    return () => subscription?.unsubscribe();
-  }, []);
-
-  return rowsMap;
+    return () => {
+      subscription?.unsubscribe();};
+  }, [onTrades]);
 };
 
 export default useTradeStreamRx;

@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef } from "react";
+import { AgGridReact } from "ag-grid-react";
 import {
   AllCommunityModule,
   ModuleRegistry,
@@ -7,21 +8,40 @@ import {
   themeAlpine,
   colorSchemeDarkBlue,
 } from "ag-grid-community";
-import { AgGridReact } from "ag-grid-react";
+import useTradeStreamRx from "../hooks/useTradeStreamRx";
 import { colDefs, defaultColDef } from "./columnDef";
-import type { RowsMap } from "../types";
 import { StyledWrapper } from "./StyledWrapper";
+import type { Trade } from "../types";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-type GridProps = {
-  rowsMap: RowsMap;
-};
-const TradeGrid = ({ rowsMap }: GridProps) => {
-  console.log("hello", rowsMap);
+const TradeGrid = () => {
+  const gridRef = useRef<AgGridReact<Trade>>(null);
+  const isInitialLoad = useRef(true);
+  
+  const onTrade = useCallback(
+    (trades: Trade) => {
+      const api = gridRef.current?.api;
+      if (!api) return;
+
+      if (isInitialLoad.current) {
+        // first message: full snapshot
+        api.applyTransactionAsync({ add: trades });
+
+        isInitialLoad.current = false;
+      } else {
+        // subsequent messages: only updates
+        console.log("hello update", trades.length);
+        api.applyTransactionAsync({ update: trades });
+      }
+    },
+    [gridRef]
+  );
+  // Subscribe to WebSocket trade updates
+  useTradeStreamRx(onTrade);
 
   const getRowId = useCallback<GetRowIdFunc>(
-    ({ data: { ticker } }: GetRowIdParams) => ticker,
+    ({ data: { ticker } }: GetRowIdParams<Trade>) => ticker,
     []
   );
 
@@ -34,12 +54,13 @@ const TradeGrid = ({ rowsMap }: GridProps) => {
   return (
     <StyledWrapper>
       <div style={{ height: 900 }}>
-        <AgGridReact
+        <AgGridReact<Trade>
+          ref={gridRef}
           theme={myTheme}
-          rowData={Object.values(rowsMap)}
+          getRowId={getRowId}
+          rowData={[]} // start empty
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
-          getRowId={getRowId}
         />
       </div>
     </StyledWrapper>

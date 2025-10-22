@@ -51,9 +51,10 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
 
       const message = TradeBatch.create({ trades: updates });
       const buffer = TradeBatch.encode(message).finish();
-      ws.send(buffer);
-    }, 500);
 
+      ws.send(buffer);
+    }, 1000);
+    
     ws.on("close", () => {
       clearInterval(interval);
       console.log("❌ Client disconnected");
@@ -64,6 +65,3 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
 server.listen(PORT, () => {
   console.log(`✅ Mock WebSocket server running at ws://localhost:${PORT}`);
 });
-function getData() {
-  throw new Error("Function not implemented.");
-}
