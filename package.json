@@ -6,12 +6,17 @@
     "portfolio-mfe",
     "trade-mfe"
   ],
+  "scripts": {
+    "dev:all": "npm run dev --prefix shell & npm run start:mock --prefix mock-ws-server & npm run build --prefix trade-mfe & npm run build --prefix portfolio-mfe"
+  },
   "dependencies": {
     "protobufjs": "^7.5.3",
+    "styled-components": "^6.1.19",
     "ws": "^8.18.2"
   },
   "devDependencies": {
     "@types/node": "^24.0.3",
+    "@types/styled-components": "^5.1.36",
     "@types/ws": "^8.18.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
