@@ -31,7 +31,7 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
   const root = maybeRoot;
   const TradeBatch = root.lookupType("TradeBatch");
   wss.on("connection", (ws: WebSocket) => {
-    console.log("🔗 Client connected");
+    console.log("Client connected");
     // send the entire dataset once on initial connection
     const fullMessage = TradeBatch.create({ trades: data });
     const fullBuffer = TradeBatch.encode(fullMessage).finish();

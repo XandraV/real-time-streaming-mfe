@@ -1,5 +1,3 @@
-import { type FunctionComponent } from "react";
-
 import type { CustomCellRendererProps } from "ag-grid-react";
 import GOOGL from "../assets/GOOGL.png";
 import AAPL from "../assets/AAPL.png";
@@ -137,9 +135,7 @@ export function TradeLogo({ ticker }: { ticker: string }) {
   );
 }
 
-export const TickerCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
-  data,
-}) => {
+export const TickerCellRenderer = ({ data }: CustomCellRendererProps) => {
   return (
     data && (
       <div
