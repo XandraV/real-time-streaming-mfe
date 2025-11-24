@@ -1,5 +1,10 @@
 import React, { Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import NavMenu from "./NavMenu";
 
 const RemoteTradeApp = React.lazy(() => import("trade/TradeApp"));
@@ -19,8 +24,8 @@ function App() {
         <NavMenu />
         <Suspense fallback={<div style={{ color: "white" }}>Loading…</div>}>
           <Routes>
+            <Route path="/" element={<Navigate to="/trade" replace />} />
             {/* <Route path="/" element={<Home />} /> */}
-            {/* <Route path="/trade" element={<RemoteTradeApp />} /> */}
             <Route path="/dashboard" element={<Home />} />
             <Route path="/trade" element={<RemoteTradeApp />} />
             <Route path="/portfolio" element={<RemotePortfolioApp />} />
