@@ -1,72 +1,93 @@
-import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import DollarLogo from "./DollarLogo";
+
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  color: white;
+  font-family: poppins, sans-serif;
+`;
 
 const StyledMenu = styled.div`
   height: 50px;
-  margin: 30px auto 30px auto;
   width: 604px;
   background-color: #38406a;
   border-radius: 100px;
   padding: 2px;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
-  font-family: poppins, sans-serif;
-  font-size: 14px;
-  color: white;
-  img {
-    transform: rotate(-18deg);
-  }
+  justify-content: center;
 `;
 
-const StyledMenuItemContainer = styled.div`
+const MenuItems = styled.div`
   background: #141d2c;
-  background-image: none;
   border-radius: 100px;
   height: 50px;
   display: flex;
-  justify-content: space-around;
   width: 660px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
 `;
 
 type MenuItemProps = {
   isCurrent: boolean;
 };
 
-const StyledMenuItem = styled(Link)<MenuItemProps>`
+const MenuItem = styled(Link)<MenuItemProps>`
   color: white;
   font-family: poppins, sans-serif;
   width: 150px;
-  align-self: center;
   height: 50px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   border-radius: 100px;
   text-decoration: none;
-  ${({ isCurrent }) => isCurrent && "background: #38406a;"}
-  &:hover {
-    background: linear-gradient(180deg, #2a2a59ff 0%, #2c2c65ff 100%);
-    box-shadow: 0px 0px 7px 0px #414158 inset;
+  position: relative;
 
-    div {
-      width: 121px;
-      height: 22px;
+  ${({ isCurrent }) =>
+    isCurrent &&
+    "background: linear-gradient(180deg, #2a2a59 0%, #2c2c65 100%);box-shadow: inset 0 0 8px #4a4a9e;color: white;"}
+
+  &:hover {
+    background: linear-gradient(180deg, #2a2a59 0%, #2c2c65 100%);
+    box-shadow: inset 0 0 8px #4a4a9e;
+    color: white;
+    div.glow {
       position: absolute;
+      width: 120px;
+      height: 20px;
       border-radius: 100px;
       background: linear-gradient(
         180deg,
-        rgba(251, 254, 255, 0.16) 0%,
-        rgba(251, 254, 255, 0.1) 33.85%,
-        rgba(250, 253, 255, 0.01) 100%
+        rgba(255, 255, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0.1) 33%,
+        rgba(255, 255, 255, 0.02) 100%
       );
       filter: blur(1px);
+      top: 5px;
     }
   }
+
   span {
-    margin: auto;
+    z-index: 2;
   }
+`;
+
+const TitleArea = styled.div`
+  position: absolute;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 28px;
+  letter-spacing: 1.4px;
 `;
 
 const NavMenu = () => {
@@ -74,37 +95,38 @@ const NavMenu = () => {
   const currentPage = location.pathname.split("/")[1] || "dashboard";
 
   return (
-    <StyledMenu id="menu">
-      <StyledMenuItemContainer>
-        <StyledMenuItem
-          to={`/dashboard`}
-          isCurrent={currentPage === "dashboard"}
-        >
-          <div />
-          <span>Dashboard</span>
-        </StyledMenuItem>
+    <StyledWrapper>
+      {/* LEFT LOGO + TITLE */}
+      <TitleArea>
+        <DollarLogo />
+        <span>StockLens</span>
+      </TitleArea>
 
-        <StyledMenuItem to={`/trade`} isCurrent={currentPage === "trade"}>
-          <div />
-          <span>Trade</span>
-        </StyledMenuItem>
+      {/* CENTER MENU */}
+      <StyledMenu>
+        <MenuItems>
+          <MenuItem to="/dashboard" isCurrent={currentPage === "dashboard"}>
+            <div className="glow" />
+            <span>Dashboard</span>
+          </MenuItem>
 
-        <StyledMenuItem
-          to={`/portfolio`}
-          isCurrent={currentPage === "portfolio"}
-        >
-          <div />
-          <span>Portfolio</span>
-        </StyledMenuItem>
-        <StyledMenuItem
-          to={`/watchlist`}
-          isCurrent={currentPage === "watchlist"}
-        >
-          <div />
-          <span>Watchlist</span>
-        </StyledMenuItem>
-      </StyledMenuItemContainer>
-    </StyledMenu>
+          <MenuItem to="/trade" isCurrent={currentPage === "trade"}>
+            <div className="glow" />
+            <span>Trade</span>
+          </MenuItem>
+
+          <MenuItem to="/portfolio" isCurrent={currentPage === "portfolio"}>
+            <div className="glow" />
+            <span>Portfolio</span>
+          </MenuItem>
+
+          <MenuItem to="/watchlist" isCurrent={currentPage === "watchlist"}>
+            <div className="glow" />
+            <span>Watchlist</span>
+          </MenuItem>
+        </MenuItems>
+      </StyledMenu>
+    </StyledWrapper>
   );
 };
 
