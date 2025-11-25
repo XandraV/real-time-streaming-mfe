@@ -14,8 +14,7 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledMenu = styled.div`
-  height: 50px;
-  width: 604px;
+  height: 40px;
   background-color: #38406a;
   border-radius: 100px;
   padding: 2px;
@@ -27,12 +26,11 @@ const StyledMenu = styled.div`
 const MenuItems = styled.div`
   background: #141d2c;
   border-radius: 100px;
-  height: 50px;
+  height: 40px;
   display: flex;
-  width: 660px;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 type MenuItemProps = {
@@ -42,8 +40,8 @@ type MenuItemProps = {
 const MenuItem = styled(Link)<MenuItemProps>`
   color: white;
   font-family: poppins, sans-serif;
-  width: 150px;
-  height: 50px;
+  width: 140px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,13 +94,11 @@ const NavMenu = () => {
 
   return (
     <StyledWrapper>
-      {/* LEFT LOGO + TITLE */}
       <TitleArea>
         <DollarLogo />
         <span>StockLens</span>
       </TitleArea>
 
-      {/* CENTER MENU */}
       <StyledMenu>
         <MenuItems>
           <MenuItem to="/dashboard" isCurrent={currentPage === "dashboard"}>
