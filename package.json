@@ -10,6 +10,7 @@
     "dev:all": "npm run dev --prefix shell & npm run start:mock --prefix mock-ws-server & npm run build --prefix trade-mfe & npm run build --prefix portfolio-mfe"
   },
   "dependencies": {
+    "lightweight-charts": "^5.0.9",
     "protobufjs": "^7.5.3",
     "styled-components": "^6.1.19",
     "ws": "^8.18.2"

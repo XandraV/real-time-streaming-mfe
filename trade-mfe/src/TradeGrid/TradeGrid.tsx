@@ -18,7 +18,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const TradeGrid = () => {
   const gridRef = useRef<AgGridReact<Trade>>(null);
   const isInitialLoad = useRef(true);
-  
+
   const onTrade = useCallback(
     (trades: Trade) => {
       const api = gridRef.current?.api;
@@ -53,7 +53,7 @@ const TradeGrid = () => {
 
   return (
     <StyledWrapper>
-      <div style={{ height: 900 }}>
+      <div style={{ width: "100%", height: "90vh" }}>
         <AgGridReact<Trade>
           ref={gridRef}
           theme={myTheme}
