@@ -21,18 +21,18 @@ export const colDefs: Array<ColDef> = [
   {
     field: "ticker",
     cellRenderer: TickerCellRenderer,
-    minWidth: 100,
+    minWidth: 140,
   },
   {
     field: "name",
-    minWidth: 300,
+    minWidth: 50,
+    resizable: true,
   },
   {
     field: "instrument",
     cellDataType: "text",
     type: "rightAligned",
-    minWidth: 80,
-    initialWidth: 80,
+    minWidth: 70,
   },
   {
     colId: "p&l",
@@ -44,8 +44,7 @@ export const colDefs: Array<ColDef> = [
     valueGetter: ({ data }: ValueGetterParams) =>
       data && data.quantity * (data.price / data.purchasePrice),
     valueFormatter: numberFormatter,
-    minWidth: 140,
-    initialWidth: 140,
+    minWidth: 200,
   },
   {
     colId: "totalValue",
@@ -57,7 +56,6 @@ export const colDefs: Array<ColDef> = [
       data && data.quantity * data.price,
     cellRenderer: "agAnimateShowChangeCellRenderer",
     valueFormatter: numberFormatter,
-    minWidth: 160,
-    initialWidth: 160,
+    minWidth: 210,
   },
 ];

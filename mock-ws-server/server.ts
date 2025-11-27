@@ -1,26 +1,37 @@
 import http from "http";
 import WebSocket, { WebSocketServer } from "ws";
 import path from "path";
-import fs from "fs";
 import protobuf from "protobufjs";
 import { data } from "./data";
 
 const PORT = 4000;
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/favicon.ico") {
-    const iconPath = path.join(__dirname, "favicon.ico");
-    if (fs.existsSync(iconPath)) {
-      const icon = fs.readFileSync(iconPath);
-      res.writeHead(200, { "Content-Type": "image/x-icon" });
-      res.end(icon);
-    } else {
-      res.writeHead(404).end();
-    }
-  } else {
-    res.writeHead(426).end("Upgrade Required");
-  }
+import express from "express";
+import cors from "cors";
+
+const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5000",
+    credentials: true,
+  })
+);
+
+app.get("/search", (req, res) => {
+  console.log("Backend hit with:", req.query.searchString);
+  const result = data.filter((item) =>
+    [item.name, item.ticker]
+      .join(" ")
+      .toLowerCase()
+      .includes((req.query.searchString as string).toLowerCase())
+  );
+  res.json({
+    result,
+  });
 });
+
+// Create HTTP server from Express
+const server = http.createServer(app);
 
 const wss = new WebSocketServer({ server });
 
@@ -54,7 +65,7 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
 
       ws.send(buffer);
     }, 1000);
-    
+
     ws.on("close", () => {
       clearInterval(interval);
       console.log("❌ Client disconnected");

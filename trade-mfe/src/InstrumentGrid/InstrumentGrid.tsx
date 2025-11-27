@@ -15,7 +15,7 @@ import type { Trade } from "../types";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const TradeGrid = () => {
+const InstrumentGrid = () => {
   const gridRef = useRef<AgGridReact<Trade>>(null);
   const isInitialLoad = useRef(true);
 
@@ -49,6 +49,7 @@ const TradeGrid = () => {
     valueChangeValueHighlightBackgroundColor: "#823fcaa0",
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
+    backgroundColor: "#172034",
   });
 
   return (
@@ -67,4 +68,4 @@ const TradeGrid = () => {
   );
 };
 
-export default TradeGrid;
+export default InstrumentGrid;

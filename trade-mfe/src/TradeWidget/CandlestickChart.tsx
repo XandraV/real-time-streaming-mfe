@@ -33,7 +33,7 @@ export default function CandlestickChart({
       layout: {
         attributionLogo: false,
         textColor: "#ffffffff",
-        background: { type: ColorType.Solid, color: "#141d2c" },
+        background: { type: ColorType.Solid, color: "#172034" },
       },
       grid: {
         vertLines: {
@@ -196,41 +196,16 @@ export default function CandlestickChart({
 
   return (
     <div
+      ref={chartContainerRef}
       style={{
-        display: "flex",
+        height,
         width: "100%",
-        height: "550px",
-        background: "#1f2836",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "4px",
+        boxSizing: "border-box",
+        position: "relative",
+        flex: 1,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          width: "95%",
-          height: "530px",
-          background: "#141d2c",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: "4px",
-        }}
-      >
-        {/* <div style={{ color: "white" }}>HELLLOOO</div> */}
-        <div
-          ref={chartContainerRef}
-          style={{
-            height,
-            width: "100%",
-            boxSizing: "border-box",
-            position: "relative",
-            flex: 1,
-          }}
-        >
-          <div ref={tooltipRef} />
-        </div>
-      </div>
+      <div ref={tooltipRef} />
     </div>
   );
 }
