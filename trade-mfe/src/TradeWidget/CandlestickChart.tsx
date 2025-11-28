@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createChart,
   type IChartApi,
@@ -13,6 +13,51 @@ type CandleChartProps = {
   data?: CandlestickData[];
   height?: number;
 };
+type Candle = {
+  time: string; // YYYY-MM-DD
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};
+
+export function generateDailyCandles(year: number): Candle[] {
+  const candles: Candle[] = [];
+
+  // Start with a random base price
+  let currentPrice = 100 + Math.random() * 20;
+
+  for (let month = 1; month <= 12; month++) {
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+
+      const open = currentPrice;
+
+      // Random small percentage movement (±3%)
+      const change = open * (Math.random() * 0.06 - 0.03);
+
+      const close = open + change;
+      const high = Math.max(open, close) + Math.random() * 2;
+      const low = Math.min(open, close) - Math.random() * 2;
+
+      currentPrice = close; // next day starts from previous close
+
+      candles.push({
+        time: dateStr,
+        open: Number(open.toFixed(2)),
+        high: Number(high.toFixed(2)),
+        low: Number(low.toFixed(2)),
+        close: Number(close.toFixed(2)),
+      });
+    }
+  }
+
+  return candles;
+}
 
 export default function CandlestickChart({
   data,
@@ -23,10 +68,12 @@ export default function CandlestickChart({
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
+  const [range, setRange] = useState("ALL"); // 🆕 range state
+
+  // -------- CREATE CHART --------
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    // Create chart
     const chart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height,
@@ -36,26 +83,14 @@ export default function CandlestickChart({
         background: { type: ColorType.Solid, color: "#172034" },
       },
       grid: {
-        vertLines: {
-          color: "#334158",
-        },
-        horzLines: {
-          color: "#334158",
-        },
+        vertLines: { color: "#334158" },
+        horzLines: { color: "#334158" },
       },
-      crosshair: {
-        mode: CrosshairMode.Normal,
-      },
+      crosshair: { mode: CrosshairMode.Normal },
       timeScale: {
         borderColor: "#485c7b",
-        barSpacing: 1000,
         fixLeftEdge: true,
         fixRightEdge: true,
-        tickMarkFormatter: (time: string) => {
-          const [year, month, day] = time.split("-").map(Number);
-
-          return `${month}/${year}`; // skip other ticks
-        },
       },
     });
 
@@ -72,18 +107,19 @@ export default function CandlestickChart({
       wickDownColor: "#ff4976",
     });
 
+    const data1 = generateDailyCandles(2020);
+    const data2 = generateDailyCandles(2021);
+    const data3 = generateDailyCandles(2022);
+    const data4 = generateDailyCandles(2023);
+    const data5 = generateDailyCandles(2024);
+    const data6 = generateDailyCandles(2025);
     candleSeries.setData([
-      { time: "2023-01-01", open: 100, high: 105, low: 98, close: 102 },
-      { time: "2023-02-01", open: 102, high: 108, low: 101, close: 107 },
-      { time: "2023-03-01", open: 107, high: 110, low: 105, close: 108 },
-      { time: "2023-04-01", open: 108, high: 112, low: 107, close: 111 },
-      { time: "2023-05-01", open: 111, high: 113, low: 109, close: 110 },
-      { time: "2023-06-01", open: 110, high: 115, low: 108, close: 114 },
-      { time: "2023-07-01", open: 114, high: 116, low: 112, close: 113 },
-      { time: "2023-08-01", open: 117, high: 120, low: 115, close: 118 },
-      { time: "2023-09-01", open: 119, high: 123, low: 118, close: 122 },
-      { time: "2023-10-01", open: 124, high: 126, low: 122, close: 125 },
-      { time: "2023-11-01", open: 125, high: 128, low: 123, close: 127 },
+      ...data1,
+      ...data2,
+      ...data3,
+      ...data4,
+      ...data5,
+      ...data6,
     ]);
 
     candleSeriesRef.current = candleSeries;
@@ -172,6 +208,7 @@ export default function CandlestickChart({
     });
 
     chart.timeScale().fitContent();
+
     const handleResize = () => {
       if (chartContainerRef.current && chartRef.current) {
         chartRef.current.applyOptions({
@@ -179,6 +216,7 @@ export default function CandlestickChart({
         });
       }
     };
+
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -187,25 +225,90 @@ export default function CandlestickChart({
     };
   }, []);
 
+  // -------- UPDATE DATA --------
   useEffect(() => {
     if (candleSeriesRef.current && data) {
       candleSeriesRef.current.setData(data);
-      //   chartRef.current?.timeScale().fitContent();
     }
   }, [data]);
 
+  // -------- RANGE SELECTOR --------
+  useEffect(() => {
+    if (!chartRef.current || !candleSeriesRef.current) return;
+
+    const seriesData = candleSeriesRef.current?.data();
+    if (!seriesData.length) return;
+
+    if (range === "ALL") {
+      chartRef.current.timeScale().fitContent();
+      return;
+    }
+
+    const daysMap: Record<string, number> = {
+      "1M": 30,
+      "3M": 90,
+      "6M": 180,
+      "1Y": 365,
+      "2Y": 730,
+      "5Y": 1825,
+    };
+
+    const days = daysMap[range];
+    const lastIndex = seriesData.length - 1;
+    const lastTime = seriesData[lastIndex].time as string;
+
+    const end = new Date(lastTime);
+    const start = new Date(end);
+    start.setDate(end.getDate() - days);
+
+    chartRef.current.timeScale().setVisibleRange({
+      from: Math.floor(start.getTime() / 1000),
+      to: Math.floor(end.getTime() / 1000),
+    });
+  }, [range]);
+
   return (
-    <div
-      ref={chartContainerRef}
-      style={{
-        height,
-        width: "100%",
-        boxSizing: "border-box",
-        position: "relative",
-        flex: 1,
-      }}
-    >
-      <div ref={tooltipRef} />
+    <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      {/* CHART */}
+      <div
+        ref={chartContainerRef}
+        style={{
+          height,
+          width: "100%",
+          position: "relative",
+          flex: 1,
+        }}
+      >
+        <div ref={tooltipRef} />
+      </div>
+
+      {/* RANGE SELECTOR */}
+      <div
+        style={{
+          marginTop: "10px",
+          display: "flex",
+          justifyContent: "center",
+          gap: "8px",
+        }}
+      >
+        {["1M", "3M", "6M", "1Y", "2Y", "5Y", "ALL"].map((r) => (
+          <button
+            key={r}
+            onClick={() => setRange(r)}
+            style={{
+              padding: "4px",
+              background: range === r ? "#4bd0e2" : "#1e2a3f",
+              border: "1px solid #4bd0e2",
+              borderRadius: "4px",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "13px",
+            }}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
