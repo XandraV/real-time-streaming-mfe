@@ -11,7 +11,12 @@ export default defineConfig({
         portfolio: "http://localhost:5001/assets/remoteEntry.js",
         trade: "http://localhost:5002/assets/remoteEntry.js",
       },
-      shared: ["react", "react-dom"],
+      shared: {
+        react: { version: false },
+        "react-dom": { version: false },
+        "react-redux": { version: false },
+        "@reduxjs/toolkit": { version: false },
+      },
     }),
   ],
   server: {

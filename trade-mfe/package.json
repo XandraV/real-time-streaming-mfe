@@ -15,6 +15,8 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@originjs/vite-plugin-federation": "^1.4.1",
+    "@reduxjs/toolkit": "^2.11.0",
+    "@tanstack/react-query": "^5.90.11",
     "ag-grid-enterprise": "^34.2.0",
     "ag-grid-react": "^34.2.0",
     "concurrently": "^9.1.2",
@@ -22,6 +24,7 @@
     "protobufjs": "^7.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "recharts": "^3.3.0",
     "rxjs": "^7.8.2",
     "styled-components": "^6.1.19"
