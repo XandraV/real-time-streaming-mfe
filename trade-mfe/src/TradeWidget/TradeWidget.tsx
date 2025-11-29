@@ -3,6 +3,8 @@ import { useSearchFetch } from "../hooks/useSearchFetch";
 import CandlestickChart from "./CandlestickChart";
 import InstrumentSearch from "./InstrumentSearch";
 import styled from "styled-components";
+import { useGetInstrumentsQuery } from "../redux/services/instrumentSearchApi";
+import { useDebounce } from "../hooks/useDebounce";
 
 const Wrapper = styled.div`
   font-family: poppins, sans-serif;
@@ -19,18 +21,34 @@ const Wrapper = styled.div`
 
 function TradeWidget() {
   const [searchString, setSearchString] = useState("");
+  const debouncedSearchString = useDebounce(searchString, 1000);
   const [selectedInstrument, setSelectedInstrument] = useState("");
   const [open, setOpen] = useState(false);
 
-  // Example mocked fetch
-  const { searchResults, isLoading, error } = useSearchFetch({
-    searchString,
-  });
+  // const { searchResults, isLoading, error } = useSearchFetch({
+  //   searchString,
+  // });
+
+  const {
+    data: searchResults,
+    error,
+    isLoading,
+  } = useGetInstrumentsQuery(
+    { searchString: debouncedSearchString },
+    {
+      skip: searchString.length < 3,
+    }
+  );
 
   const handleChange = (value: string) => {
     setSearchString(value);
-
     setOpen(true);
+  };
+
+  const onInstrumentSelectResult = (value: string) => {
+    setSelectedInstrument(value);
+    setOpen(false);
+    setSearchString("");
   };
 
   return (
@@ -50,11 +68,7 @@ function TradeWidget() {
           onChange={handleChange}
           results={searchResults ?? []}
           showResults={open}
-          onSelectResult={(v) => {
-            setSelectedInstrument(v);
-            setOpen(false);
-            setSearchString("");
-          }}
+          onSelectResult={onInstrumentSelectResult}
           onClickOutside={() => setOpen(false)}
         />
       </div>
@@ -66,3 +80,4 @@ function TradeWidget() {
 }
 
 export default TradeWidget;
+

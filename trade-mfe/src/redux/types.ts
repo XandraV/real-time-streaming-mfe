@@ -1,0 +1,1 @@
+export type Instrument = { ticker: string };

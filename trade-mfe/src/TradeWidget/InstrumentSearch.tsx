@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useRef } from "react";
+import type { Instrument } from "../redux/types";
 
 type SearchInputProps = {
   placeholder?: string;
   value: string;
   onChange: (value: string) => void;
-  results: string[]; // what to show in dropdown
+  results: Instrument[];
   onSelectResult: (value: string) => void;
   showResults: boolean; // parent decides when dropdown appears
   onClickOutside?: () => void;
@@ -120,8 +121,8 @@ export default function InstrumentSearch({
       {showResults && results.length > 0 && (
         <Dropdown>
           {results.map((item) => (
-            <DropdownItem key={item} onClick={() => onSelectResult(item)}>
-              {item}
+            <DropdownItem key={item.ticker} onClick={() => onSelectResult(item.ticker)}>
+              {item.ticker}
             </DropdownItem>
           ))}
         </Dropdown>
