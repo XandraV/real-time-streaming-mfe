@@ -5,6 +5,8 @@ import InstrumentSearch from "./InstrumentSearch";
 import styled from "styled-components";
 import { useGetInstrumentsQuery } from "../redux/services/instrumentSearchApi";
 import { useDebounce } from "../hooks/useDebounce";
+import { generateDailyCandles } from "./utils";
+import { useGetCandlestickDataQuery } from "../redux/services/candlestickDataApi";
 
 const Wrapper = styled.div`
   font-family: poppins, sans-serif;
@@ -22,9 +24,15 @@ const Wrapper = styled.div`
 function TradeWidget() {
   const [searchString, setSearchString] = useState("");
   const debouncedSearchString = useDebounce(searchString, 1000);
-  const [selectedInstrument, setSelectedInstrument] = useState("");
+  const [selectedInstrument, setSelectedInstrument] = useState("AAPL");
   const [open, setOpen] = useState(false);
-
+  const data1 = generateDailyCandles(2020);
+  const data2 = generateDailyCandles(2021);
+  const data3 = generateDailyCandles(2022);
+  const data4 = generateDailyCandles(2023);
+  const data5 = generateDailyCandles(2024);
+  const data6 = generateDailyCandles(2025);
+  const data = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
   // const { searchResults, isLoading, error } = useSearchFetch({
   //   searchString,
   // });
@@ -39,6 +47,12 @@ function TradeWidget() {
       skip: searchString.length < 3,
     }
   );
+
+  const {
+    data: candlestickDataResults,
+    error: candlestickDataError,
+    isLoading: candlestickDataIsLoading,
+  } = useGetCandlestickDataQuery({ searchString: selectedInstrument });
 
   const handleChange = (value: string) => {
     setSearchString(value);
@@ -73,11 +87,10 @@ function TradeWidget() {
         />
       </div>
       <div style={{ width: "100%", height: "100%" }}>
-        <CandlestickChart />
+        <CandlestickChart data={candlestickDataResults ?? []} />
       </div>
     </Wrapper>
   );
 }
 
 export default TradeWidget;
-

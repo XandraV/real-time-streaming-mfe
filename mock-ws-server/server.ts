@@ -3,6 +3,7 @@ import WebSocket, { WebSocketServer } from "ws";
 import path from "path";
 import protobuf from "protobufjs";
 import { data } from "./data";
+import { generateDailyCandles } from "./utils";
 
 const PORT = 4000;
 
@@ -25,6 +26,35 @@ app.get("/search", (req, res) => {
       .includes((req.query.searchString as string).toLowerCase())
   );
   res.json({
+    result,
+  });
+});
+
+app.get("/candles", (req, res) => {
+  const ticker = (req.query.searchString as string)?.toUpperCase();
+
+  if (!ticker) {
+    return res
+      .status(400)
+      .json({ error: "Missing required query param: ticker" });
+  }
+  const data1 = generateDailyCandles(2020);
+  const data2 = generateDailyCandles(2021);
+  const data3 = generateDailyCandles(2022);
+  const data4 = generateDailyCandles(2023);
+  const data5 = generateDailyCandles(2024);
+  const data6 = generateDailyCandles(2025);
+  const result = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
+
+
+  if (!result) {
+    return res
+      .status(404)
+      .json({ error: `No candlestick data found for ${ticker}` });
+  }
+
+  res.json({
+    ticker,
     result,
   });
 });

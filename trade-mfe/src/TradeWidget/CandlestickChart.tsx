@@ -10,54 +10,9 @@ import {
 } from "lightweight-charts";
 
 type CandleChartProps = {
-  data?: CandlestickData[];
+  data: CandlestickData[];
   height?: number;
 };
-type Candle = {
-  time: string; // YYYY-MM-DD
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-};
-
-export function generateDailyCandles(year: number): Candle[] {
-  const candles: Candle[] = [];
-
-  // Start with a random base price
-  let currentPrice = 100 + Math.random() * 20;
-
-  for (let month = 1; month <= 12; month++) {
-    const daysInMonth = new Date(year, month, 0).getDate();
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
-        day
-      ).padStart(2, "0")}`;
-
-      const open = currentPrice;
-
-      // Random small percentage movement (±3%)
-      const change = open * (Math.random() * 0.06 - 0.03);
-
-      const close = open + change;
-      const high = Math.max(open, close) + Math.random() * 2;
-      const low = Math.min(open, close) - Math.random() * 2;
-
-      currentPrice = close; // next day starts from previous close
-
-      candles.push({
-        time: dateStr,
-        open: Number(open.toFixed(2)),
-        high: Number(high.toFixed(2)),
-        low: Number(low.toFixed(2)),
-        close: Number(close.toFixed(2)),
-      });
-    }
-  }
-
-  return candles;
-}
 
 export default function CandlestickChart({
   data,
@@ -68,7 +23,7 @@ export default function CandlestickChart({
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
-  const [range, setRange] = useState("ALL"); // 🆕 range state
+  const [range, setRange] = useState("3M"); // 🆕 range state
 
   // -------- CREATE CHART --------
   useEffect(() => {
@@ -107,20 +62,7 @@ export default function CandlestickChart({
       wickDownColor: "#ff4976",
     });
 
-    const data1 = generateDailyCandles(2020);
-    const data2 = generateDailyCandles(2021);
-    const data3 = generateDailyCandles(2022);
-    const data4 = generateDailyCandles(2023);
-    const data5 = generateDailyCandles(2024);
-    const data6 = generateDailyCandles(2025);
-    candleSeries.setData([
-      ...data1,
-      ...data2,
-      ...data3,
-      ...data4,
-      ...data5,
-      ...data6,
-    ]);
+    candleSeries.setData(data);
 
     candleSeriesRef.current = candleSeries;
 
