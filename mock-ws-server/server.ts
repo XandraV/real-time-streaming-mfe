@@ -18,7 +18,6 @@ app.use(
 );
 
 app.get("/search", (req, res) => {
-  console.log("Backend hit with:", req.query.searchString);
   const result = data.filter((item) =>
     [item.name, item.ticker]
       .join(" ")
@@ -30,7 +29,6 @@ app.get("/search", (req, res) => {
   });
 });
 
-// Create HTTP server from Express
 const server = http.createServer(app);
 
 const wss = new WebSocketServer({ server });

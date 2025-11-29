@@ -7,7 +7,7 @@ import type { RowsMap, Trade } from "../types";
 
 /**
  * Streams trade data over WebSocket and calls onTrades() with new batches.
- * Emits an array of trades each time new data arrives (not a map).
+ * Emits an array of trades each time new data arrives.
  */
 const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
   useEffect(() => {
@@ -40,10 +40,7 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
         }),
         // Throttle updates (optional)
        // throttleTime(300, undefined, { leading: true, trailing: true }),
-        tap(() => {
-          // update local snapshot
-         console.log('hi ref', Object.values(rowsRef).length)
-        }),
+       
         map(() => Object.values(rowsRef)),
       );
 
