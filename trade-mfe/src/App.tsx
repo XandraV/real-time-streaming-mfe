@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import TradeGrid from "./InstrumentGrid/InstrumentGrid";
-import TradeWidget from "./TradeWidget/TradeWidget";
+import TradeWidget from "./components/TradeWidget/TradeWidget";
 import { queryClient } from "./redux/queryClient";
 import { store } from "./redux/store";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ function App() {
           <div style={{ flex: 1 }}>
             <TradeWidget />
           </div>
-          <div style={{ flex: 1}}>
+          <div style={{ flex: 1 }}>
             <TradeGrid />
           </div>
         </Wrapper>

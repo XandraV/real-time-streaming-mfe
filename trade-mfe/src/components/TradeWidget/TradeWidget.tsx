@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useSearchFetch } from "../hooks/useSearchFetch";
+import { useSearchFetch } from "../../hooks/useSearchFetch";
 import CandlestickChart from "./CandlestickChart";
 import InstrumentSearch from "./InstrumentSearch";
 import styled from "styled-components";
-import { useGetInstrumentsQuery } from "../redux/services/instrumentSearchApi";
-import { useDebounce } from "../hooks/useDebounce";
+import { useGetInstrumentsQuery } from "../../redux/services/instrumentSearchApi";
+import { useDebounce } from "../../hooks/useDebounce";
 import { generateDailyCandles } from "./utils";
-import { useGetCandlestickDataQuery } from "../redux/services/candlestickDataApi";
+import { useGetCandlestickDataQuery } from "../../redux/services/candlestickDataApi";
 
 const Wrapper = styled.div`
   font-family: poppins, sans-serif;
@@ -77,6 +77,7 @@ function TradeWidget() {
         <div style={{ color: "white", fontSize: 20 }}>
           Ticker: {selectedInstrument}
         </div>
+        
         <InstrumentSearch
           value={searchString}
           onChange={handleChange}
