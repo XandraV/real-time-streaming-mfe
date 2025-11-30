@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import type { Account } from "../../types";
+import type { Account } from "./types";
 
 type AccountSelectorProps = {
   accounts: Account[];

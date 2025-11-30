@@ -8,10 +8,10 @@ import {
   themeAlpine,
   colorSchemeDarkBlue,
 } from "ag-grid-community";
-import useTradeStreamRx from "../hooks/useTradeStreamRx";
+import useTradeStreamRx from "../../hooks/useTradeStreamRx";
 import { colDefs, defaultColDef } from "./columnDef";
 import { StyledWrapper } from "./StyledWrapper";
-import type { Trade } from "../types";
+import type { Trade } from "../../types";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

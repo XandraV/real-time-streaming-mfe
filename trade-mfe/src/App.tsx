@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import TradeGrid from "./InstrumentGrid/InstrumentGrid";
+import InstrumentGrid from "./components/InstrumentGrid/InstrumentGrid";
 import TradeWidget from "./components/TradeWidget/TradeWidget";
 import { queryClient } from "./redux/queryClient";
 import { store } from "./redux/store";
@@ -25,7 +25,7 @@ function App() {
             <TradeWidget />
           </div>
           <div style={{ flex: 1 }}>
-            <TradeGrid />
+            <InstrumentGrid />
           </div>
         </Wrapper>
       </QueryClientProvider>
