@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const SelectorBox = styled.div`
@@ -45,7 +46,6 @@ const Dropdown = styled.div`
   background: #1f2836;
   border: 1px solid #2a2d35;
   border-radius: 6px;
-  // max-height: 200px;
   overflow-y: auto;
   z-index: 10;
   scrollbar-width: thin;

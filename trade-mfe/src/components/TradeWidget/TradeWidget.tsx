@@ -29,10 +29,9 @@ function TradeWidget() {
   const selectedInstrument = useSelector(
     (state: RootState) => state.instruments.selectedInstrument
   );
-  console.log("Selected instrument from store:", selectedInstrument);
+  
   const [searchString, setSearchString] = useState("");
   const debouncedSearchString = useDebounce(searchString, 1000);
-  const [open, setOpen] = useState(false);
 
   // Fetch default instrument data (AAPL) only on initial render
   const { data: defaultInstrumentData } = useGetInstrumentsQuery(
@@ -61,12 +60,10 @@ function TradeWidget() {
   console.log("Candlestick data:", searchResults);
   const handleChange = (value: string) => {
     setSearchString(value);
-    setOpen(true);
   };
 
   const onInstrumentSelectResult = (value: Instrument) => {
     setSelectedInstrument(value);
-    setOpen(false);
     setSearchString("");
     dispatch(setSelectedInstrument(value));
   };
@@ -82,27 +79,14 @@ function TradeWidget() {
         }}
       >
         {selectedInstrument && (
-          <InstrumentInfo
-            ticker={selectedInstrument.ticker}
-            name={selectedInstrument.name}
-            exchange={selectedInstrument.exchange}
-            price={selectedInstrument.price}
-            change={selectedInstrument.change}
-            changePct={selectedInstrument.changePct}
-            ask={selectedInstrument.ask}
-            askSize={selectedInstrument.askSize}
-            bid={selectedInstrument.bid}
-            bidSize={selectedInstrument.bidSize}
-          />
+          <InstrumentInfo selectedInstrument={selectedInstrument} />
         )}
 
         <InstrumentSearch
           value={searchString}
           onChange={handleChange}
           results={searchResults ?? []}
-          showResults={open}
           onSelectResult={onInstrumentSelectResult}
-          onClickOutside={() => setOpen(false)}
         />
       </div>
       <div style={{ width: "100%", height: "100%" }}>

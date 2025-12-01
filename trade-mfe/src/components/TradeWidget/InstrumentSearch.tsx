@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Instrument } from "../../redux/types";
 
 type SearchInputProps = {
@@ -9,7 +9,6 @@ type SearchInputProps = {
   onChange: (value: string) => void;
   results: Instrument[];
   onSelectResult: (value: Instrument) => void;
-  showResults: boolean; // parent decides when dropdown appears
   onClickOutside?: () => void;
 };
 
@@ -92,11 +91,10 @@ export default function InstrumentSearch({
   onChange,
   results,
   onSelectResult,
-  showResults,
-  onClickOutside,
 }: SearchInputProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-
+  const [open, setOpen] = useState(false);
+  const onClickOutside = () => setOpen(false);
   // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -114,17 +112,23 @@ export default function InstrumentSearch({
         <SearchIcon sx={{ fontSize: 18, color: "#9ba1ac" }} />
         <Input
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setOpen(true);
+          }}
           placeholder={placeholder}
         />
       </InputContainer>
 
-      {showResults && results.length > 0 && (
+      {open && results.length > 0 && (
         <Dropdown>
           {results.map((item) => (
             <DropdownItem
               key={item.ticker}
-              onClick={() => onSelectResult(item)}
+              onClick={() => {
+                onSelectResult(item);
+                setOpen(false);
+              }}
             >
               {item.ticker}
             </DropdownItem>

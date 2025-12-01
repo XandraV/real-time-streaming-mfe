@@ -150,7 +150,7 @@ const NavMenu = () => {
             <span>Portfolio</span>
           </MenuItem>
 
-          <MenuItem to="/" isCurrent={currentPage === "watchlist"}>
+          <MenuItem to="/trade" isCurrent={currentPage === "watchlist"}>
             <div className="glow" />
             <span>Watchlist</span>
           </MenuItem>

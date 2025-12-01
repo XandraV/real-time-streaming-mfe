@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
   AllCommunityModule,
@@ -13,33 +13,45 @@ import { colDefs, defaultColDef } from "./columnDef";
 import { StyledWrapper } from "./StyledWrapper";
 import type { Trade } from "../../types";
 import React from "react";
+import { useLazyGetInstrumentsQuery } from "../../redux/services/instrumentSearchApi";
+import { setSelectedInstrument } from "../../redux/services/instrumentSlice";
+import { useDispatch } from "react-redux";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const InstrumentGrid = () => {
+  const dispatch = useDispatch();
   const gridRef = useRef<AgGridReact<Trade>>(null);
   const isInitialLoad = useRef(true);
+  const [fetchInstrument] = useLazyGetInstrumentsQuery();
+  const [rowData, setRowData] = useState<Trade[]>([]);
 
-  const onTrade = useCallback(
-    (trades: Trade) => {
-      const api = gridRef.current?.api;
-      if (!api) return;
+  const onTrade = useCallback((trades: Trade[]) => {
+    const api = gridRef.current?.api;
+    if (!api) return;
 
-      if (isInitialLoad.current) {
-        // first message: full snapshot
-        api.applyTransactionAsync({ add: trades });
-
-        isInitialLoad.current = false;
-      } else {
-        // subsequent messages: only updates
-       // console.log("hello update", trades.length);
-        api.applyTransactionAsync({ update: trades });
-      }
-    },
-    [gridRef]
-  );
+    if (isInitialLoad.current) {
+      setRowData(trades); // populate initial snapshot
+      isInitialLoad.current = false;
+    } else {
+      api.applyTransactionAsync({ update: trades });
+    }
+  }, []);
   // Subscribe to WebSocket trade updates
   useTradeStreamRx(onTrade);
+
+  const handleRowDoubleClick = useCallback(
+    (row: any) => {
+      fetchInstrument({ searchString: row.data.ticker })
+        .unwrap()
+        .then((result) => {
+          if (result.length > 0) {
+            dispatch(setSelectedInstrument(result[0]));
+          }
+        });
+    },
+    [dispatch, fetchInstrument]
+  );
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams<Trade>) => ticker,
@@ -55,16 +67,17 @@ const InstrumentGrid = () => {
 
   return (
     <StyledWrapper>
-      <div style={{ width: "100%", height: "50vh" }}>
+      <div style={{ width: "100%", height: "52vh" }}>
         <AgGridReact<Trade>
           ref={gridRef}
           theme={myTheme}
           getRowId={getRowId}
-          rowData={[]} // start empty
+          rowData={rowData} // start empty
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           rowHeight={30}
           headerHeight={32}
+          onRowDoubleClicked={handleRowDoubleClick}
         />
       </div>
     </StyledWrapper>

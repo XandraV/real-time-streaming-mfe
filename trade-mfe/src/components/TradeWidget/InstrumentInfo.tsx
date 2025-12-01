@@ -1,19 +1,9 @@
 import styled from "styled-components";
+import type { Instrument } from "../../redux/types";
 
-interface InstrumentInfoProps {
-  ticker: string;
-  name: string;
-  exchange: string;
-
-  price: number;
-  change: number;
-  changePct: number;
-
-  ask: number;
-  askSize: number;
-  bid: number;
-  bidSize: number;
-}
+type InstrumentInfoProps = {
+  selectedInstrument: Instrument;
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -96,18 +86,21 @@ const Right = styled.div`
 `;
 
 export default function InstrumentInfo({
-  ticker,
-  name,
-  exchange,
-  price,
-  change,
-  changePct,
-  ask,
-  askSize,
-  bid,
-  bidSize,
+  selectedInstrument,
 }: InstrumentInfoProps) {
-  const positive = change >= 0;
+  const {
+    ticker,
+    name,
+    exchange,
+    price,
+    change,
+    changePct,
+    ask,
+    askSize,
+    bid,
+    bidSize,
+  } = selectedInstrument;
+  const positive = selectedInstrument.change >= 0;
 
   return (
     <Wrapper>
