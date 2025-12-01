@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CandlestickChart from "./CandlestickChart";
 import InstrumentSearch from "./InstrumentSearch";
 import styled from "styled-components";
 import { useGetInstrumentsQuery } from "../../redux/services/instrumentSearchApi";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useGetCandlestickDataQuery } from "../../redux/services/candlestickDataApi";
-import { AccountSelector } from "./AccountSelector";
-import type { Account } from "../../types";
+import InstrumentInfo from "./InstrumentInfo";
+import { useDispatch, useSelector } from "react-redux";
+import type { Instrument } from "../../redux/types";
+import { setSelectedInstrument } from "../../redux/services/instrumentSlice";
+import type { RootState } from "../../redux/store";
 
 const Wrapper = styled.div`
   font-family: poppins, sans-serif;
@@ -22,45 +25,50 @@ const Wrapper = styled.div`
 `;
 
 function TradeWidget() {
+  const dispatch = useDispatch();
+  const selectedInstrument = useSelector(
+    (state: RootState) => state.instruments.selectedInstrument
+  );
+  console.log("Selected instrument from store:", selectedInstrument);
   const [searchString, setSearchString] = useState("");
   const debouncedSearchString = useDebounce(searchString, 1000);
-  const [selectedInstrument, setSelectedInstrument] = useState("AAPL");
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [open, setOpen] = useState(false);
-  // const { searchResults, isLoading, error } = useSearchFetch({
-  //   searchString,
-  // });
 
-  const {
-    data: searchResults,
-    error,
-    isLoading,
-  } = useGetInstrumentsQuery(
-    { searchString: debouncedSearchString },
-    {
-      skip: searchString.length < 3,
+  // Fetch default instrument data (AAPL) only on initial render
+  const { data: defaultInstrumentData } = useGetInstrumentsQuery(
+    { searchString: "AAPL" },
+    { skip: searchString.length > 0 } // skip if user started searching
+  );
+  useEffect(() => {
+    if (defaultInstrumentData && defaultInstrumentData.length > 0) {
+      dispatch(setSelectedInstrument(defaultInstrumentData[0]));
     }
+  }, [defaultInstrumentData, dispatch]);
+
+  // Fetch search results dynamically
+  const { data: searchResults } = useGetInstrumentsQuery(
+    { searchString: debouncedSearchString },
+    { skip: debouncedSearchString.length < 3 }
   );
 
   const {
     data: candlestickDataResults,
     error: candlestickDataError,
     isLoading: candlestickDataIsLoading,
-  } = useGetCandlestickDataQuery({ searchString: selectedInstrument });
-
+  } = useGetCandlestickDataQuery({
+    searchString: selectedInstrument?.ticker || "AAPL",
+  });
+  console.log("Candlestick data:", searchResults);
   const handleChange = (value: string) => {
     setSearchString(value);
     setOpen(true);
   };
 
-  const onInstrumentSelectResult = (value: string) => {
+  const onInstrumentSelectResult = (value: Instrument) => {
     setSelectedInstrument(value);
     setOpen(false);
     setSearchString("");
-  };
-
-  const onSelectAccount = (value: Account) => {
-    setSelectedAccount(value);
+    dispatch(setSelectedInstrument(value));
   };
 
   return (
@@ -69,21 +77,25 @@ function TradeWidget() {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginBottom: 12,
+          marginBottom: -20,
           gap: 12,
         }}
       >
-        <div style={{ color: "white", fontSize: 20 }}>
-          Ticker: {selectedInstrument}
-        </div>
-        <AccountSelector
-          accounts={[
-            { name: "Account 1", id: "12345" },
-            { name: "Account 2", id: "67890" },
-          ]}
-          selected={selectedAccount}
-          onSelect={onSelectAccount}
-        />
+        {selectedInstrument && (
+          <InstrumentInfo
+            ticker={selectedInstrument.ticker}
+            name={selectedInstrument.name}
+            exchange={selectedInstrument.exchange}
+            price={selectedInstrument.price}
+            change={selectedInstrument.change}
+            changePct={selectedInstrument.changePct}
+            ask={selectedInstrument.ask}
+            askSize={selectedInstrument.askSize}
+            bid={selectedInstrument.bid}
+            bidSize={selectedInstrument.bidSize}
+          />
+        )}
+
         <InstrumentSearch
           value={searchString}
           onChange={handleChange}

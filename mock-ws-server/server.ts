@@ -19,12 +19,26 @@ app.use(
 );
 
 app.get("/search", (req, res) => {
-  const result = data.filter((item) =>
-    [item.name, item.ticker]
-      .join(" ")
-      .toLowerCase()
-      .includes((req.query.searchString as string).toLowerCase())
-  );
+  const result = data
+    .filter((item) =>
+      [item.name, item.ticker]
+        .join(" ")
+        .toLowerCase()
+        .includes((req.query.searchString as string).toLowerCase())
+    )
+    .map((item) => ({
+      ticker: item.ticker,
+      name: item.name,
+      exchange: "NASDAQ",
+      price: +(Math.random() * 500).toFixed(2),
+      change: +(Math.random() * 10).toFixed(2),
+      changePct: +(Math.random() * 10).toFixed(2),
+      ask: +(100 + Math.random() * 100).toFixed(2),
+      askSize: +(100 + Math.random() * 100).toFixed(2),
+      bid: +(100 + Math.random() * 100).toFixed(2),
+      bidSize: +(100 + Math.random() * 100).toFixed(2),
+    }));
+    console.log("Search request for:", req.query.searchString, "->", result.length, "results");
   res.json({
     result,
   });
@@ -45,7 +59,6 @@ app.get("/candles", (req, res) => {
   const data5 = generateDailyCandles(2024);
   const data6 = generateDailyCandles(2025);
   const result = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
-
 
   if (!result) {
     return res

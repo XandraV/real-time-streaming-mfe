@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import type { Account } from "../../types";
+import AccountSummary from "./AccountSummary";
 
 type AccountSelectorProps = {
   accounts: Account[];
@@ -11,7 +12,7 @@ type AccountSelectorProps = {
 
 const Wrapper = styled.div`
   position: relative;
-  width: 200px;
+  width: 300px;
   font-family: poppins, sans-serif;
   font-size: 14px;
 `;
@@ -19,10 +20,10 @@ const Wrapper = styled.div`
 const SelectorBox = styled.div`
   display: flex;
   align-items: center;
-  background: #232c3e;
+  background: #172035;
   border: 1px solid #3a4153;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 4px 10px;
   color: #d6d5d5ff;
   justify-content: space-between;
 `;
@@ -30,13 +31,13 @@ const SelectorBox = styled.div`
 const Dropdown = styled.div`
   font-family: poppins, sans-serif;
   position: absolute;
-  top: 42px;
+  top: 64px;
   left: 0;
   right: 0;
   background: #1f2836;
   border: 1px solid #2a2d35;
   border-radius: 6px;
-  max-height: 200px;
+  // max-height: 200px;
   overflow-y: auto;
   z-index: 10;
   scrollbar-width: thin;
@@ -93,9 +94,15 @@ export function AccountSelector({
   return (
     <Wrapper ref={wrapperRef}>
       <SelectorBox onClick={() => setOpen((o) => !o)}>
-        <span>
+        {/* <span>
           {selected ? `${selected.name} ${selected.id}` : "Select account"}
-        </span>
+        </span> */}
+        <AccountSummary
+          accountId="U15331401"
+          currency="GBP"
+          balance="21,494.74"
+          buyingPower="21,494.64"
+        />
         <ArrowDropDownIcon sx={{ color: "#9ba1ac" }} />
       </SelectorBox>
 
@@ -111,6 +118,12 @@ export function AccountSelector({
             >
               {acc.name} {acc.id}
             </DropdownItem>
+            // <AccountSummary
+            //   accountId="U15331401"
+            //   currency="GBP"
+            //   balance="21,494.74"
+            //   buyingPower="21,494.64"
+            // />
           ))}
         </Dropdown>
       )}

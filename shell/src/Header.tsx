@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import DollarLogo from "./DollarLogo";
+import { AccountSelector, type Account } from "./AccountSelector";
+import { useState } from "react";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -86,12 +88,32 @@ const TitleArea = styled.div`
   gap: 8px;
   font-size: 28px;
   letter-spacing: 1.4px;
+  left: 10px;
 `;
 
+const accounts = [
+  {
+    name: "Account 1",
+    id: "U19873141",
+    currency: "GBP",
+    balance: "10,494.74",
+    buyingPower: "10,494.64",
+  },
+  {
+    name: "Account 2",
+    id: "U15331401",
+    currency: "GBP",
+    balance: "21,494.74",
+    buyingPower: "21,494.64",
+  },
+];
 const NavMenu = () => {
   const location = useLocation();
   const currentPage = location.pathname.split("/")[1] || "dashboard";
-
+  const [selectedAccount, setSelectedAccount] = useState<Account>(accounts[0]);
+  const onSelectAccount = (account: Account) => {
+    setSelectedAccount(account);
+  };
   return (
     <StyledWrapper>
       <TitleArea>
@@ -101,27 +123,45 @@ const NavMenu = () => {
 
       <StyledMenu>
         <MenuItems>
-          <MenuItem to="/dashboard" isCurrent={currentPage === "dashboard"}>
+          <MenuItem to="/trade" isCurrent={currentPage === "dashboard"}>
             <div className="glow" />
             <span>Dashboard</span>
           </MenuItem>
 
-          <MenuItem to="/trade" isCurrent={currentPage === "trade"}>
+          <MenuItem
+            to="/trade"
+            isCurrent={currentPage === "trade"}
+            onClick={(e) => {
+              if (location.pathname === "/trade") e.preventDefault();
+            }}
+          >
             <div className="glow" />
             <span>Trade</span>
           </MenuItem>
 
-          <MenuItem to="/portfolio" isCurrent={currentPage === "portfolio"}>
+          <MenuItem
+            to="/portfolio"
+            onClick={(e) => {
+              if (location.pathname === "/portfolio") e.preventDefault();
+            }}
+            isCurrent={currentPage === "portfolio"}
+          >
             <div className="glow" />
             <span>Portfolio</span>
           </MenuItem>
 
-          <MenuItem to="/watchlist" isCurrent={currentPage === "watchlist"}>
+          <MenuItem to="/" isCurrent={currentPage === "watchlist"}>
             <div className="glow" />
             <span>Watchlist</span>
           </MenuItem>
         </MenuItems>
       </StyledMenu>
+
+      <AccountSelector
+        accounts={accounts}
+        selected={selectedAccount}
+        onSelect={onSelectAccount}
+      />
     </StyledWrapper>
   );
 };

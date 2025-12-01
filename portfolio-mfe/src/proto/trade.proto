@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message Trade {
+  string ticker = 1;
+  string name = 2;
+  string instrument = 3;
+  float quantity = 4;  
+  float purchasePrice = 5;
+  float price = 6;
+  repeated float timeline = 7;
+}
+
+message TradeBatch {
+  repeated Trade trades = 1;
+}

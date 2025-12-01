@@ -12,6 +12,7 @@ import useTradeStreamRx from "../../hooks/useTradeStreamRx";
 import { colDefs, defaultColDef } from "./columnDef";
 import { StyledWrapper } from "./StyledWrapper";
 import type { Trade } from "../../types";
+import React from "react";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -31,7 +32,7 @@ const InstrumentGrid = () => {
         isInitialLoad.current = false;
       } else {
         // subsequent messages: only updates
-        console.log("hello update", trades.length);
+       // console.log("hello update", trades.length);
         api.applyTransactionAsync({ update: trades });
       }
     },
@@ -54,7 +55,7 @@ const InstrumentGrid = () => {
 
   return (
     <StyledWrapper>
-      <div style={{ width: "100%", height: "90vh" }}>
+      <div style={{ width: "100%", height: "50vh" }}>
         <AgGridReact<Trade>
           ref={gridRef}
           theme={myTheme}
@@ -62,10 +63,12 @@ const InstrumentGrid = () => {
           rowData={[]} // start empty
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
+          rowHeight={30}
+          headerHeight={32}
         />
       </div>
     </StyledWrapper>
   );
 };
 
-export default InstrumentGrid;
+export default React.memo(InstrumentGrid);

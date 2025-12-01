@@ -8,14 +8,14 @@ type SearchInputProps = {
   value: string;
   onChange: (value: string) => void;
   results: Instrument[];
-  onSelectResult: (value: string) => void;
+  onSelectResult: (value: Instrument) => void;
   showResults: boolean; // parent decides when dropdown appears
   onClickOutside?: () => void;
 };
 
 const Wrapper = styled.div`
   position: relative;
-  width: 240px;
+  width: 220px;
 `;
 
 const InputContainer = styled.div`
@@ -24,7 +24,7 @@ const InputContainer = styled.div`
   background: #232c3e;
   border: 1px solid #3a4153;
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 6px 8px;
   color: #d6d5d5ff;
 `;
 
@@ -44,13 +44,13 @@ const Input = styled.input`
 const Dropdown = styled.div`
   font-family: poppins, sans-serif;
   position: absolute;
-  top: 42px;
+  top: 36px;
   left: 0;
   right: 0;
   background: #1f2836;
   border: 1px solid #2a2d35;
   border-radius: 6px;
-  max-height: 200px;
+  max-height: 180px;
   overflow-y: auto;
   z-index: 10;
   scrollbar-width: thin;
@@ -77,8 +77,9 @@ const Dropdown = styled.div`
 `;
 
 const DropdownItem = styled.div`
-  padding: 8px 12px;
+  padding: 6px 8px;
   cursor: pointer;
+  font-size: 14px;
   color: #d6d5d5;
   &:hover {
     background: #19202cff;
@@ -123,7 +124,7 @@ export default function InstrumentSearch({
           {results.map((item) => (
             <DropdownItem
               key={item.ticker}
-              onClick={() => onSelectResult(item.ticker)}
+              onClick={() => onSelectResult(item)}
             >
               {item.ticker}
             </DropdownItem>

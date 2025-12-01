@@ -1,9 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-
-type Instrument<K extends keyof any = string, V = any> = {
-  ticker: string;
-} & Record<K, V>;
+import type { Instrument } from "../types";
 
 interface InstrumentsState {
   list: Instrument[];
@@ -25,5 +21,6 @@ export const instrumentSlice = createSlice({
   },
 });
 
-export const { setInstruments, setSelectedInstrument } = instrumentSlice.actions;
+export const { setInstruments, setSelectedInstrument } =
+  instrumentSlice.actions;
 export default instrumentSlice.reducer;

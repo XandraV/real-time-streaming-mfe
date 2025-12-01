@@ -16,7 +16,7 @@ type CandleChartProps = {
 
 export default function CandlestickChart({
   data,
-  height = 500,
+  height = 300,
 }: CandleChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
@@ -211,6 +211,34 @@ export default function CandlestickChart({
 
   return (
     <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      {/* RANGE SELECTOR */}
+      <div
+        style={{
+          marginTop: "10px",
+          marginBottom: "10px",
+          display: "flex",
+          justifyContent: "right",
+          gap: "4px",
+        }}
+      >
+        {["1M", "3M", "6M", "1Y", "2Y", "5Y", "ALL"].map((r) => (
+          <button
+            key={r}
+            onClick={() => setRange(r)}
+            style={{
+              padding: "5px",
+              background: range === r ? "#4bd0e2" : "#1e2a3f",
+              border: "1px solid #4bd0e2",
+              borderRadius: "6px",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "12px",
+            }}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
       {/* CHART */}
       <div
         ref={chartContainerRef}
@@ -222,34 +250,6 @@ export default function CandlestickChart({
         }}
       >
         <div ref={tooltipRef} />
-      </div>
-
-      {/* RANGE SELECTOR */}
-      <div
-        style={{
-          marginTop: "10px",
-          display: "flex",
-          justifyContent: "center",
-          gap: "8px",
-        }}
-      >
-        {["1M", "3M", "6M", "1Y", "2Y", "5Y", "ALL"].map((r) => (
-          <button
-            key={r}
-            onClick={() => setRange(r)}
-            style={{
-              padding: "4px",
-              background: range === r ? "#4bd0e2" : "#1e2a3f",
-              border: "1px solid #4bd0e2",
-              borderRadius: "4px",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "13px",
-            }}
-          >
-            {r}
-          </button>
-        ))}
       </div>
     </div>
   );
