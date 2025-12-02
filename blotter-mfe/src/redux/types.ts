@@ -6,4 +6,5 @@ export type BlotterRow = {
   price: number;
   purchasePrice: number;
   status: string;
+  timestamp: string;
 };

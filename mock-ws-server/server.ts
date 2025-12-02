@@ -86,17 +86,34 @@ app.get("/blotter", (req, res) => {
       .status(400)
       .json({ error: "Missing required query param: account" });
   }
-  const result = [
-    {
-      ticker: "NFLX",
-      name: "Netflix Inc",
-      instrument: "Stock",
-      quantity: Math.floor(100 + Math.random() * 10),
+  const numRows = 5 + Math.floor(Math.random() * 2); // 5 to 10 rows
+  const today = new Date();
+  const todayDateString = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+  // Shuffle and pick random instruments
+  const shuffled = [...data].sort(() => 0.5 - Math.random());
+  const selectedInstruments = shuffled.slice(0, numRows);
+
+  const result = selectedInstruments.map((instr) => {
+    const time = new Date(
+      todayDateString +
+        "T" +
+        `${String(Math.floor(Math.random() * 24)).padStart(2, "0")}:` +
+        `${String(Math.floor(Math.random() * 60)).padStart(2, "0")}:` +
+        `${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`
+    ).toISOString();
+
+    return {
+      ticker: instr.ticker,
+      name: instr.name,
+      instrument: instr.instrument,
+      quantity: Math.floor(100 + Math.random() * 10), // whole number
       price: +(100 + Math.random() * 100).toFixed(2),
       purchasePrice: +(Math.random() * 500).toFixed(2),
-      status: "Booked",
-    },
-  ];
+      status: Math.random() > 0.5 ? "Booked" : "Pending",
+      timestamp: time,
+    };
+  });
 
   res.json({
     result,

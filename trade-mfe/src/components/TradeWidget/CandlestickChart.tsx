@@ -8,6 +8,7 @@ import {
   ColorType,
   CrosshairMode,
 } from "lightweight-charts";
+import RangeSelector from "./RangeSelector";
 
 type CandleChartProps = {
   data: CandlestickData[];
@@ -23,7 +24,7 @@ export default function CandlestickChart({
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
-  const [range, setRange] = useState("3M"); // 🆕 range state
+  const [range, setRange] = useState("3M");
 
   // -------- CREATE CHART --------
   useEffect(() => {
@@ -211,35 +212,8 @@ export default function CandlestickChart({
 
   return (
     <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      {/* RANGE SELECTOR */}
-      <div
-        style={{
-          marginTop: "10px",
-          marginBottom: "10px",
-          display: "flex",
-          justifyContent: "right",
-          gap: "4px",
-        }}
-      >
-        {["1M", "3M", "6M", "1Y", "2Y", "5Y", "ALL"].map((r) => (
-          <button
-            key={r}
-            onClick={() => setRange(r)}
-            style={{
-              padding: "5px",
-              background: range === r ? "#4bd0e2" : "#1e2a3f",
-              border: "1px solid #4bd0e2",
-              borderRadius: "6px",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "12px",
-            }}
-          >
-            {r}
-          </button>
-        ))}
-      </div>
-      {/* CHART */}
+      <RangeSelector range={range} setRange={setRange}/>
+    
       <div
         ref={chartContainerRef}
         style={{

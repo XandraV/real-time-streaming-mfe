@@ -20,25 +20,6 @@ type BlotterGridProps = {
 const BlotterGrid = ({ data }: BlotterGridProps) => {
   const gridRef = useRef<AgGridReact<Trade>>(null);
 
-  // const onTrade = useCallback(
-  //   (trades: Trade) => {
-  //     const api = gridRef.current?.api;
-  //     if (!api) return;
-
-  //     if (isInitialLoad.current) {
-  //       // first message: full snapshot
-  //       api.applyTransactionAsync({ add: data });
-
-  //       isInitialLoad.current = false;
-  //     } else {
-  //       // subsequent messages: only updates
-  //       // console.log("hello update", trades.length);
-  //       api.applyTransactionAsync({ update: trades });
-  //     }
-  //   },
-  //   [gridRef]
-  // );
-
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams<Trade>) => ticker,
     []
@@ -49,12 +30,6 @@ const BlotterGrid = ({ data }: BlotterGridProps) => {
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
     backgroundColor: "#172034",
-
-    // headerHeight: '30px',
-    // headerTextColor: 'white',
-    // headerBackgroundColor: 'black',
-    // headerCellHoverBackgroundColor: 'rgba(80, 40, 140, 0.66)',
-    // headerCellMovingBackgroundColor: 'rgb(80, 40, 140)',
   });
 
   return (

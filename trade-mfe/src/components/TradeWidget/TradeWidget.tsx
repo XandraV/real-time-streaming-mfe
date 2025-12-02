@@ -24,27 +24,33 @@ const Wrapper = styled.div`
   border: 1px solid #3a4153;
 `;
 
+const StyledHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: -20px;
+  gap: 12;
+`;
+
 function TradeWidget() {
   const dispatch = useDispatch();
   const selectedInstrument = useSelector(
     (state: RootState) => state.instruments.selectedInstrument
   );
-  
+
   const [searchString, setSearchString] = useState("");
   const debouncedSearchString = useDebounce(searchString, 1000);
 
-  // Fetch default instrument data (AAPL) only on initial render
   const { data: defaultInstrumentData } = useGetInstrumentsQuery(
     { searchString: "AAPL" },
-    { skip: searchString.length > 0 } // skip if user started searching
+    { skip: searchString.length > 0 }
   );
+
   useEffect(() => {
     if (defaultInstrumentData && defaultInstrumentData.length > 0) {
       dispatch(setSelectedInstrument(defaultInstrumentData[0]));
     }
   }, [defaultInstrumentData, dispatch]);
 
-  // Fetch search results dynamically
   const { data: searchResults } = useGetInstrumentsQuery(
     { searchString: debouncedSearchString },
     { skip: debouncedSearchString.length < 3 }
@@ -52,8 +58,8 @@ function TradeWidget() {
 
   const {
     data: candlestickDataResults,
-    error: candlestickDataError,
-    isLoading: candlestickDataIsLoading,
+    error,
+    isLoading,
   } = useGetCandlestickDataQuery({
     searchString: selectedInstrument?.ticker || "AAPL",
   });
@@ -70,14 +76,7 @@ function TradeWidget() {
 
   return (
     <Wrapper>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: -20,
-          gap: 12,
-        }}
-      >
+      <StyledHeader>
         {selectedInstrument && (
           <InstrumentInfo selectedInstrument={selectedInstrument} />
         )}
@@ -88,10 +87,8 @@ function TradeWidget() {
           results={searchResults ?? []}
           onSelectResult={onInstrumentSelectResult}
         />
-      </div>
-      <div style={{ width: "100%", height: "100%" }}>
-        <CandlestickChart data={candlestickDataResults ?? []} />
-      </div>
+      </StyledHeader>
+      <CandlestickChart data={candlestickDataResults ?? []} />
     </Wrapper>
   );
 }

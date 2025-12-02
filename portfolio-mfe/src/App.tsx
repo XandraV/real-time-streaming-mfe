@@ -1,13 +1,5 @@
-import InstrumentGrid from "./components/InstrumentGrid/InstrumentGrid";
-
 function App() {
-  return (
-    <>
-      <div>
-        <InstrumentGrid />
-      </div>
-    </>
-  );
+  return <div>Portfolio</div>;
 }
 
 export default App;

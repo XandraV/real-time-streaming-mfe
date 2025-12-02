@@ -4,6 +4,7 @@ import {
   type ValueGetterParams,
 } from "ag-grid-community";
 import { TickerCellRenderer } from "./TickerCellRenderer";
+import StatusCellRenderer from "./StatusCellRenderer";
 
 const numberFormatter: ValueFormatterFunc = ({ value }) => {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -21,18 +22,19 @@ export const colDefs: Array<ColDef> = [
   {
     field: "ticker",
     cellRenderer: TickerCellRenderer,
-    minWidth: 140,
+    width: 120,
+    maxWidth: 120,
   },
   {
     field: "name",
-    minWidth: 50,
     resizable: true,
+    width: 220,
+    maxWidth: 220,
   },
   {
     field: "instrument",
     cellDataType: "text",
     type: "rightAligned",
-    minWidth: 70,
   },
   {
     field: "quantity",
@@ -71,7 +73,7 @@ export const colDefs: Array<ColDef> = [
     valueGetter: ({ data }: ValueGetterParams) =>
       data && data.quantity * (data.price / data.purchasePrice),
     valueFormatter: numberFormatter,
-    minWidth: 200,
+    minWidth: 100,
   },
   {
     colId: "totalValue",
@@ -81,15 +83,36 @@ export const colDefs: Array<ColDef> = [
     filter: "agNumberColumnFilter",
     valueGetter: ({ data }: ValueGetterParams) =>
       data && data.quantity * data.price,
-    cellRenderer: "agAnimateShowChangeCellRenderer",
     valueFormatter: numberFormatter,
-    minWidth: 210,
+    width: 120,
+    maxWidth: 120,
   },
   {
     field: "status",
     headerName: "Status",
     cellDataType: "text",
+    cellRenderer: StatusCellRenderer,
+    width: 120,
+    maxWidth: 120,
+  },
+  {
+    field: "timestamp",
+    headerName: "Time",
+    cellDataType: "text",
     type: "rightAligned",
     minWidth: 70,
+    valueFormatter: ({ value }) => {
+      if (!value) return "";
+      const date = new Date(value);
+      const pad = (n: number) => n.toString().padStart(2, "0");
+
+      const year = date.getFullYear();
+      const month = pad(date.getMonth() + 1); // months are 0-based
+      const day = pad(date.getDate());
+      const hours = pad(date.getHours());
+      const minutes = pad(date.getMinutes());
+
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    },
   },
 ];

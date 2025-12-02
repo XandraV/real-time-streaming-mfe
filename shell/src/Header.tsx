@@ -140,7 +140,7 @@ const NavMenu = () => {
           </MenuItem>
 
           <MenuItem
-            to="/portfolio"
+            to="/trade"
             onClick={(e) => {
               if (location.pathname === "/portfolio") e.preventDefault();
             }}

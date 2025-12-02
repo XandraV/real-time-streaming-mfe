@@ -18,7 +18,7 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 4px 4px;
   background: #172034;
   border-bottom: 1px solid #3a4153;
 `;
@@ -27,6 +27,7 @@ const Title = styled.span`
   font-size: 16px;
   font-weight: 500;
   color: white;
+  padding-left: 4px;
 `;
 
 const RefreshButton = styled.button`

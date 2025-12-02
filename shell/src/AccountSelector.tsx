@@ -35,7 +35,7 @@ const SelectorBox = styled.div`
   background: #172035;
   border: 1px solid #3a4153;
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 0px 10px;
   color: #d6d5d5ff;
   justify-content: space-between;
 `;
@@ -105,9 +105,6 @@ export function AccountSelector({
   return (
     <Wrapper ref={wrapperRef}>
       <SelectorBox onClick={() => setOpen((o) => !o)}>
-        {/* <span>
-          {selected ? `${selected.name} ${selected.id}` : "Select account"}
-        </span> */}
         <AccountSummary
           accountId={selectedAccount.id}
           currency={selectedAccount.currency}
