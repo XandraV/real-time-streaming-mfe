@@ -6,11 +6,10 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: "shell",
-      remotes: {
-        portfolio: "http://localhost:5001/assets/remoteEntry.js",
-        trade: "http://localhost:5002/assets/remoteEntry.js",
-        blotter: "http://localhost:5003/assets/remoteEntry.js",
+      name: "blotter",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./BlotterApp": "./src/App.tsx",
       },
       shared: {
         react: { version: false },
@@ -21,7 +20,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 8000,
+    port: 5003,
   },
   build: {
     target: "esnext",

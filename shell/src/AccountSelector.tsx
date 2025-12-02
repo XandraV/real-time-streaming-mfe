@@ -6,10 +6,13 @@ import AccountSummary from "./AccountSummary";
 export type Account = {
   id: string;
   name: string;
+  currency: string;
+  balance: string;
+  buyingPower: string;
 };
 type AccountSelectorProps = {
   accounts: Account[];
-  selected: Account | null;
+  selectedAccount: Account;
   onSelect: (account: Account) => void;
 };
 
@@ -82,7 +85,7 @@ const DropdownItem = styled.div`
 
 export function AccountSelector({
   accounts,
-  selected,
+  selectedAccount,
   onSelect,
 }: AccountSelectorProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -106,32 +109,26 @@ export function AccountSelector({
           {selected ? `${selected.name} ${selected.id}` : "Select account"}
         </span> */}
         <AccountSummary
-          accountId="U15331401"
-          currency="GBP"
-          balance="21,494.74"
-          buyingPower="21,494.64"
+          accountId={selectedAccount.id}
+          currency={selectedAccount.currency}
+          balance={selectedAccount.balance}
+          buyingPower={selectedAccount.buyingPower}
         />
         <ArrowDropDownIcon sx={{ color: "#9ba1ac" }} />
       </SelectorBox>
 
       {open && (
         <Dropdown>
-          {accounts.map((acc) => (
+          {accounts.map((account) => (
             <DropdownItem
-              key={acc.id}
+              key={account.id}
               onClick={() => {
-                onSelect(acc);
+                onSelect(account);
                 setOpen(false);
               }}
             >
-              {acc.name} {acc.id}
+              {account.name} {account.id}
             </DropdownItem>
-            // <AccountSummary
-            //   accountId="U15331401"
-            //   currency="GBP"
-            //   balance="21,494.74"
-            //   buyingPower="21,494.64"
-            // />
           ))}
         </Dropdown>
       )}

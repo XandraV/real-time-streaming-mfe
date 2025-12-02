@@ -38,7 +38,13 @@ app.get("/search", (req, res) => {
       bid: +(100 + Math.random() * 100).toFixed(2),
       bidSize: +(100 + Math.random() * 100).toFixed(2),
     }));
-    console.log("Search request for:", req.query.searchString, "->", result.length, "results");
+  console.log(
+    "Search request for:",
+    req.query.searchString,
+    "->",
+    result.length,
+    "results"
+  );
   res.json({
     result,
   });
@@ -68,6 +74,31 @@ app.get("/candles", (req, res) => {
 
   res.json({
     ticker,
+    result,
+  });
+});
+
+app.get("/blotter", (req, res) => {
+  const account = (req.query.searchString as string)?.toUpperCase();
+
+  if (!account) {
+    return res
+      .status(400)
+      .json({ error: "Missing required query param: account" });
+  }
+  const result = [
+    {
+      ticker: "NFLX",
+      name: "Netflix Inc",
+      instrument: "Stock",
+      quantity: Math.floor(100 + Math.random() * 10),
+      price: +(100 + Math.random() * 100).toFixed(2),
+      purchasePrice: +(Math.random() * 500).toFixed(2),
+      status: "Booked",
+    },
+  ];
+
+  res.json({
     result,
   });
 });

@@ -10,7 +10,8 @@ import Header from "./Header";
 
 import RemoteTradeApp from "trade/TradeApp";
 import RemotePortfolioApp from "portfolio/PortfolioApp";
-
+// import RemoteBlotterApp from "blotter/BlotterApp";
+const RemoteBlotterApp = React.lazy(() => import("blotter/BlotterApp"));
 // <Routes> normally unmount on navigation ie local state is lost
 // Simple KeepAliveRoutes keeps components mounted and hence state is preserved
 function KeepAliveRoutes() {
@@ -19,11 +20,9 @@ function KeepAliveRoutes() {
 
   return (
     <div>
-      <div
-        style={{ display: route === "/trade" ? "block" : "none" }}
-      >
+      <div style={{ display: route === "/trade" ? "block" : "none" }}>
         <RemoteTradeApp />
-        <RemotePortfolioApp />
+        <RemoteBlotterApp />
       </div>
 
       <div style={{ display: route === "/portfolio" ? "block" : "none" }}>

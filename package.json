@@ -7,7 +7,7 @@
     "trade-mfe"
   ],
   "scripts": {
-    "dev:all": "npm run dev --prefix shell & npm run start:mock --prefix mock-ws-server & npm run build --prefix trade-mfe & npm run build --prefix portfolio-mfe"
+    "dev:all": "npm run dev --prefix shell & npm run start:mock --prefix mock-ws-server & npm run build --prefix trade-mfe & npm run build --prefix portfolio-mfe & npm run build --prefix blotter-mfe"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

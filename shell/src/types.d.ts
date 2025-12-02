@@ -9,3 +9,9 @@ declare module "trade/TradeApp" {
   const TradeApp: React.ComponentType<any>;
   export default TradeApp;
 }
+
+declare module "blotter/BlotterApp" {
+  import React from "react";
+  const BlotterApp: React.ComponentType<any>;
+  export default BlotterApp;
+}
