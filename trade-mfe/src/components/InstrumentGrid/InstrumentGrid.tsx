@@ -58,7 +58,7 @@ const InstrumentGrid = () => {
     []
   );
 
-  const myTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
+  const myTheme2 = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
     valueChangeValueHighlightBackgroundColor: "#823fcaa0",
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
@@ -67,19 +67,17 @@ const InstrumentGrid = () => {
 
   return (
     <StyledWrapper>
-      <div style={{ width: "100%", height: "52vh" }}>
-        <AgGridReact<Trade>
-          ref={gridRef}
-          theme={myTheme}
-          getRowId={getRowId}
-          rowData={rowData} // start empty
-          columnDefs={colDefs}
-          defaultColDef={defaultColDef}
-          rowHeight={30}
-          headerHeight={32}
-          onRowDoubleClicked={handleRowDoubleClick}
-        />
-      </div>
+      <AgGridReact<Trade>
+        ref={gridRef}
+        theme={myTheme2}
+        getRowId={getRowId}
+        rowData={rowData} // start empty
+        columnDefs={colDefs}
+        defaultColDef={defaultColDef}
+        rowHeight={30}
+        headerHeight={32}
+        onRowDoubleClicked={handleRowDoubleClick}
+      />
     </StyledWrapper>
   );
 };

@@ -17,6 +17,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 type BlotterGridProps = {
   data: any[];
 };
+
 const BlotterGrid = ({ data }: BlotterGridProps) => {
   const gridRef = useRef<AgGridReact<Trade>>(null);
 
@@ -26,7 +27,7 @@ const BlotterGrid = ({ data }: BlotterGridProps) => {
   );
 
   const myTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
-    valueChangeValueHighlightBackgroundColor: "#f3c728d4",
+    valueChangeValueHighlightBackgroundColor: "#823fcaa0",
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
     backgroundColor: "#172034",
