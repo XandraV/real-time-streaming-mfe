@@ -10,12 +10,11 @@ const useTradeStream = () => {
 
   useEffect(() => {
     let isMounted = true;
-    //let tradeType: protobuf.Type;
     let tradeBatchType: protobuf.Type;
 
     protobuf.load(tradeProtoUrl).then((root) => {
       if (!isMounted) return;
-      // tradeType = root.lookupType("Trade");
+      
       tradeBatchType = root.lookupType("TradeBatch");
       const socket = new WebSocket("ws://localhost:4000");
       socketRef.current = socket;
@@ -31,7 +30,7 @@ const useTradeStream = () => {
           enums: String,
           bytes: String,
         });
-        console.log("💬 Received new message: ", batch);
+        
         setRowsMap((prev) => {
           const updated = { ...prev };
           for (const row of batch.trades) {

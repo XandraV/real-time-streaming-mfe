@@ -35,18 +35,16 @@ const BlotterGrid = ({ data }: BlotterGridProps) => {
 
   return (
     <StyledWrapper>
-      <div style={{ width: "100%", height: "25vh" }}>
-        <AgGridReact<Trade>
-          ref={gridRef}
-          theme={myTheme}
-          getRowId={getRowId}
-          rowData={data}
-          columnDefs={colDefs}
-          defaultColDef={defaultColDef}
-          rowHeight={30}
-          headerHeight={32}
-        />
-      </div>
+      <AgGridReact<Trade>
+        ref={gridRef}
+        theme={myTheme}
+        getRowId={getRowId}
+        rowData={data}
+        columnDefs={colDefs}
+        defaultColDef={defaultColDef}
+        rowHeight={30}
+        headerHeight={32}
+      />
     </StyledWrapper>
   );
 };

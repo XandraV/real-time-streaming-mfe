@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 export const StyledWrapper = styled.div`
+  width: 100%;
+  height: 25vh;
   .ag-row {
     --ag-row-hover-color: #323a46;
   }

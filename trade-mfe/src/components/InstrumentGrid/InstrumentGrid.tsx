@@ -31,7 +31,7 @@ const InstrumentGrid = () => {
     if (!api) return;
 
     if (isInitialLoad.current) {
-      setRowData(trades); // populate initial snapshot
+      setRowData(trades); 
       isInitialLoad.current = false;
     } else {
       api.applyTransactionAsync({ update: trades });
