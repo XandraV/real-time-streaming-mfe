@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "./useDebounce";
 
 interface FetchType {
   searchString: string | null;
 }
 
-const API_KEY = "7f63612";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useSearchFetch = ({ searchString }: FetchType) => {
   const debouncedValue = useDebounce(searchString, 500);
@@ -17,9 +17,7 @@ export const useSearchFetch = ({ searchString }: FetchType) => {
 
   const fetchData = async (searchString: string) => {
     setIsLoading(true);
-    return await fetch(
-      `http://localhost:4000/search?searchString=${searchString}`
-    )
+    return await fetch(`${BASE_URL}search?searchString=${searchString}`)
       .then((res) => {
         console.log("fetch:", res);
         if (!res.ok) {

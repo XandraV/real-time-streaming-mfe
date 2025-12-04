@@ -5,6 +5,7 @@ import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
 import type { RowsMap, Trade } from "../types";
 
+const WS_URL = import.meta.env.VITE_WS_URL;
 /**
  * Streams trade data over WebSocket and calls onTrades() with new batches.
  * Emits an array of trades each time new data arrives.
@@ -16,7 +17,7 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
     protobuf.load(tradeProtoUrl).then((root) => {
       const tradeBatchType = root.lookupType("TradeBatch");
       const socket$ = webSocket({
-        url: "ws://localhost:4000",
+        url: WS_URL,
         binaryType: "arraybuffer",
         deserializer: (e) => e.data,
       });
@@ -38,10 +39,10 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
           rowsRef = {};
           trades.forEach((t) => (rowsRef[t.ticker] = t));
         }),
-        // Throttle updates (optional)
-       // throttleTime(300, undefined, { leading: true, trailing: true }),
-       
-        map(() => Object.values(rowsRef)),
+        // Throttle updates
+        // throttleTime(300, undefined, { leading: true, trailing: true }),
+
+        map(() => Object.values(rowsRef))
       );
 
       subscription = stream$.subscribe({
@@ -53,7 +54,8 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
     });
 
     return () => {
-      subscription?.unsubscribe();};
+      subscription?.unsubscribe();
+    };
   }, [onTrades]);
 };
 

@@ -3,6 +3,8 @@ import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
 import type { RowsMap } from "../types";
 
+const WS_URL = import.meta.env.VITE_WS_URL;
+
 const useTradeStream = () => {
   const [rowsMap, setRowsMap] = useState<RowsMap>({});
 
@@ -14,9 +16,9 @@ const useTradeStream = () => {
 
     protobuf.load(tradeProtoUrl).then((root) => {
       if (!isMounted) return;
-      
+
       tradeBatchType = root.lookupType("TradeBatch");
-      const socket = new WebSocket("ws://localhost:4000");
+      const socket = new WebSocket(WS_URL);
       socketRef.current = socket;
 
       socket.onopen = () => console.log("WebSocket connected");
@@ -30,7 +32,7 @@ const useTradeStream = () => {
           enums: String,
           bytes: String,
         });
-        
+
         setRowsMap((prev) => {
           const updated = { ...prev };
           for (const row of batch.trades) {

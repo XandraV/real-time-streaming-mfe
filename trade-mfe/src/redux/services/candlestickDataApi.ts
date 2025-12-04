@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { type CandlestickData } from "lightweight-charts";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const candlestickDataApi = createApi({
   reducerPath: "candlestickDataApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000/",
+    baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
       return headers;
