@@ -104,7 +104,6 @@ export default function InstrumentInfo({
 
   return (
     <Wrapper>
-      {/* LEFT SIDE */}
       <Left>
         <TickerLine>
           <Ticker>{ticker}</Ticker>
@@ -128,7 +127,6 @@ export default function InstrumentInfo({
         </PriceLine>
       </Left>
 
-      {/* RIGHT SIDE */}
       <Right>
         <div>
           <span className="label">Ask</span>

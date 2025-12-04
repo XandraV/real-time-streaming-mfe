@@ -26,7 +26,6 @@ export default function CandlestickChart({
 
   const [range, setRange] = useState("3M");
 
-  // -------- CREATE CHART --------
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
@@ -83,7 +82,7 @@ export default function CandlestickChart({
         return;
       }
 
-      const candle = param.seriesData.get(candleSeries);
+      const candle = param.seriesData.get(candleSeries) as CandlestickData;
       if (!candle) {
         tooltip.style.display = "none";
         return;
@@ -104,36 +103,38 @@ export default function CandlestickChart({
         "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif";
 
       tooltip.innerHTML = `
-  <div style="
-    background: #1e1e1e;
-    padding: 12px 16px;
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.4;
-    border: 1px solid #909090ff;
-    border-radius: 4px;
-  ">
-    <div style="display: flex; justify-content: space-between;">
-      <span>Open:</span>
-      <span style="color: #4bd0e2ff;">$${candle.open.toLocaleString()}</span>
-    </div>
+        <div
+          style="
+            background: #1e1e1e;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.4;
+            border: 1px solid #909090ff;
+            border-radius: 4px;
+          "
+        >
+          <div style="display: flex; justify-content: space-between;">
+            <span>Open:</span>
+            <span style="color: #4bd0e2ff;">$${candle.open.toLocaleString()}</span>
+          </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-      <span>High:</span>
-      <span style="color: #4bd0e2ff;">$${candle.high.toLocaleString()}</span>
-    </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span>High:</span>
+            <span style="color: #4bd0e2ff;">$${candle.high.toLocaleString()}</span>
+          </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-      <span>Low:</span>
-      <span style="color: #4bd0e2ff;">$${candle.low.toLocaleString()}</span>
-    </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span>Low:</span>
+            <span style="color: #4bd0e2ff;">$${candle.low.toLocaleString()}</span>
+          </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-      <span>Close:</span>
-      <span style="color: #4bd0e2ff;">$${candle.close.toLocaleString()}</span>
-    </div>
-  </div>
-`;
+          <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span>Close:</span>
+            <span style="color: #4bd0e2ff;">$${candle.close.toLocaleString()}</span>
+          </div>
+        </div>
+      `;
 
       // Proper position
       let left = param.point.x + toolTipMargin;
@@ -168,14 +169,13 @@ export default function CandlestickChart({
     };
   }, []);
 
-  // -------- UPDATE DATA --------
   useEffect(() => {
     if (candleSeriesRef.current && data) {
       candleSeriesRef.current.setData(data);
     }
   }, [data]);
 
-  // -------- RANGE SELECTOR --------
+  // time range update
   useEffect(() => {
     if (!chartRef.current || !candleSeriesRef.current) return;
 
@@ -212,8 +212,7 @@ export default function CandlestickChart({
 
   return (
     <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      <RangeSelector range={range} setRange={setRange}/>
-    
+      <RangeSelector range={range} setRange={setRange} />
       <div
         ref={chartContainerRef}
         style={{
