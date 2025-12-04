@@ -6,14 +6,13 @@ import {
   useLocation,
 } from "react-router-dom";
 import React, { Suspense } from "react";
-import Header from "./Header";
+import Header from "./components/Header";
 
 import RemoteTradeApp from "trade/TradeApp";
 import RemotePortfolioApp from "portfolio/PortfolioApp";
-// import RemoteBlotterApp from "blotter/BlotterApp";
 const RemoteBlotterApp = React.lazy(() => import("blotter/BlotterApp"));
 // <Routes> normally unmount on navigation ie local state is lost
-// Simple KeepAliveRoutes keeps components mounted and hence state is preserved
+// KeepAliveRoutes keeps components mounted and hence state is preserved
 function KeepAliveRoutes() {
   const location = useLocation();
   const route = location.pathname;
@@ -48,7 +47,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/trade" replace />} />
         </Routes>
-        {/* Keep-alive renderer */}
         <KeepAliveRoutes />
       </Suspense>
     </Router>
