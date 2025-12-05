@@ -1,7 +1,7 @@
 import React from "react";
 import BlotterGrid from "./BlotterGrid/BlotterGrid";
-import { useGetBlotterDataQuery } from "../redux/services/blotterDataApi";
-import SyncIcon from "@mui/icons-material/Sync";
+import { useGetBlotterDataQuery } from "../redux/services/";
+import RefreshButton from "./RefreshButton";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const Controls = styled.div`
+const GridControls = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,20 +26,7 @@ const Controls = styled.div`
 const Title = styled.span`
   font-size: 16px;
   font-weight: 500;
-  color: white;
   padding-left: 4px;
-`;
-
-const RefreshButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #172034;
-  border: 1px solid #3a4153;
-  color: #9ba1ac;
-  padding: 4px 10px;
-  border-radius: 4px;
-  cursor: pointer;
 `;
 
 const BlotterWidget = () => {
@@ -53,13 +40,10 @@ const BlotterWidget = () => {
 
   return (
     <Wrapper>
-      <Controls>
+      <GridControls>
         <Title>Trade Blotter</Title>
-
-        <RefreshButton onClick={onRefresh}>
-          Refresh <SyncIcon sx={{ fontSize: 20, color: "#9ba1ac" }} />
-        </RefreshButton>
-      </Controls>
+        <RefreshButton onClick={onRefresh} />
+      </GridControls>
 
       <BlotterGrid data={data ?? []} />
     </Wrapper>
