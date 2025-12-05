@@ -14,16 +14,17 @@ const Wrapper = styled.div`
   color: white;
 `;
 
-const Left = styled.div`
+const Column = styled.div<{ right?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-align: ${({ right }) => (right ? "right" : "left")};
 `;
 
-const TickerLine = styled.div`
+const Row = styled.div`
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 6px;
 `;
 
 const Ticker = styled.span`
@@ -36,20 +37,9 @@ const Name = styled.span`
   font-size: 12px;
 `;
 
-const Price = styled.div`
+const Price = styled.span`
   font-size: 28px;
   font-weight: 600;
-`;
-
-const ChangeRow = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const PriceLine = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
 `;
 
 const Change = styled.span<{ positive: boolean }>`
@@ -58,31 +48,15 @@ const Change = styled.span<{ positive: boolean }>`
   font-weight: 500;
 `;
 
-const Right = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: right;
-  font-size: 14px;
+const Label = styled.span`
+  opacity: 0.6;
+  margin-right: 6px;
+`;
 
-  .label {
-    opacity: 0.6;
-    margin-right: 6px;
-  }
-
-  .ask {
-    color: #e53935;
-  }
-
-  .bid {
-    color: #2872ff;
-  }
-
-  .size {
-    opacity: 0.7;
-    font-size: 12px;
-    margin-left: 4px;
-  }
+const Size = styled.span`
+  opacity: 0.7;
+  font-size: 12px;
+  margin-left: 4px;
 `;
 
 export default function InstrumentInfo({
@@ -100,45 +74,49 @@ export default function InstrumentInfo({
     bid,
     bidSize,
   } = selectedInstrument;
-  const positive = selectedInstrument.change >= 0;
+
+  const positive = change >= 0;
 
   return (
     <Wrapper>
-      <Left>
-        <TickerLine>
+      <Column>
+        <Row>
           <Ticker>{ticker}</Ticker>
           <Name>
             {name} &nbsp; {exchange}
           </Name>
-        </TickerLine>
-        <PriceLine>
-          <Price>{price.toFixed(2)}</Price>
+        </Row>
 
-          <ChangeRow>
+        <Row style={{ alignItems: "flex-end" }}>
+          <Price>{price}</Price>
+
+          <Row>
             <Change positive={positive}>
               {positive ? "+" : ""}
-              {change.toFixed(2)}
+              {change}
             </Change>
+
             <Change positive={positive}>
               {positive ? "+" : ""}
-              {changePct.toFixed(2)}%
+              {changePct}%
             </Change>
-          </ChangeRow>
-        </PriceLine>
-      </Left>
+          </Row>
+        </Row>
+      </Column>
 
-      <Right>
-        <div>
-          <span className="label">Ask</span>
-          <span className="ask">{ask.toFixed(2)}</span>
-          <span className="size">× {askSize}</span>
-        </div>
-        <div>
-          <span className="label">Bid</span>
-          <span className="bid">{bid.toFixed(2)}</span>
-          <span className="size">× {bidSize}</span>
-        </div>
-      </Right>
+      <Column right>
+        <Row>
+          <Label>Ask</Label>
+          <span style={{ color: "#e53935" }}>{ask}</span>
+          <Size>× {askSize}</Size>
+        </Row>
+
+        <Row>
+          <Label>Bid</Label>
+          <span style={{ color: "#2872ff" }}>{bid}</span>
+          <Size>× {bidSize}</Size>
+        </Row>
+      </Column>
     </Wrapper>
   );
 }
