@@ -7,31 +7,34 @@ import {
   type GetRowIdParams,
   themeAlpine,
   colorSchemeDarkBlue,
+  type RowDoubleClickedEvent,
 } from "ag-grid-community";
-import useTradeStreamRx from "../../hooks/useTradeStreamRx";
+import { useTradeStreamRx } from "../../hooks";
 import { colDefs, defaultColDef } from "./columnDef";
 import { StyledWrapper } from "./StyledWrapper";
-import type { Trade } from "../../types";
+import type { Instrument } from "../../types";
 import React from "react";
-import { useLazyGetInstrumentsQuery } from "../../redux/services/instrumentSearchApi";
-import { setSelectedInstrument } from "../../redux/services/instrumentSlice";
+import {
+  setSelectedInstrument,
+  useLazyGetInstrumentsQuery,
+} from "../../redux/services";
 import { useDispatch } from "react-redux";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const InstrumentGrid = () => {
   const dispatch = useDispatch();
-  const gridRef = useRef<AgGridReact<Trade>>(null);
+  const gridRef = useRef<AgGridReact<Instrument>>(null);
   const isInitialLoad = useRef(true);
   const [fetchInstrument] = useLazyGetInstrumentsQuery();
-  const [rowData, setRowData] = useState<Trade[]>([]);
+  const [rowData, setRowData] = useState<Instrument[]>([]);
 
-  const onTrade = useCallback((trades: Trade[]) => {
+  const onTrade = useCallback((trades: Instrument[]) => {
     const api = gridRef.current?.api;
     if (!api) return;
 
     if (isInitialLoad.current) {
-      setRowData(trades); 
+      setRowData(trades);
       isInitialLoad.current = false;
     } else {
       api.applyTransactionAsync({ update: trades });
@@ -41,8 +44,11 @@ const InstrumentGrid = () => {
   useTradeStreamRx(onTrade);
 
   const handleRowDoubleClick = useCallback(
-    (row: any) => {
-      fetchInstrument({ searchString: row.data.ticker })
+    (event: RowDoubleClickedEvent<Instrument>) => {
+      const ticker = event.data?.ticker;
+      if (!ticker) return;
+
+      fetchInstrument({ searchString: ticker })
         .unwrap()
         .then((result) => {
           if (result.length > 0) {
@@ -54,7 +60,7 @@ const InstrumentGrid = () => {
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
-    ({ data: { ticker } }: GetRowIdParams<Trade>) => ticker,
+    ({ data: { ticker } }: GetRowIdParams<Instrument>) => ticker,
     []
   );
 
@@ -67,7 +73,7 @@ const InstrumentGrid = () => {
 
   return (
     <StyledWrapper>
-      <AgGridReact<Trade>
+      <AgGridReact<Instrument>
         ref={gridRef}
         theme={myTheme2}
         getRowId={getRowId}

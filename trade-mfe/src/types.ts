@@ -1,5 +1,13 @@
-export type Trade = any;
-export type RowsMap = Record<string, Trade>;
+export type Instrument = {
+  ticker: string;
+  name: string;
+  instrument: string;
+  quantity: number;
+  purchasePrice: number;
+  price: number;
+  timeline: number[];
+};
+export type RowsMap = Record<string, Instrument>;
 
 export type Account = {
   id: string;

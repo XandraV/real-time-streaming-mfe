@@ -1,16 +1,17 @@
 import { useState } from "react";
 import InstrumentSearch from "./InstrumentSearch";
 import styled from "styled-components";
-import { useGetInstrumentsQuery } from "../../redux/services/instrumentSearchApi";
-import { useDebounce } from "../../hooks/useDebounce";
-import { useGetCandlestickDataQuery } from "../../redux/services/candlestickDataApi";
+import { useDebounce, useDefaultInstrument } from "../../hooks";
 import InstrumentInfo from "./InstrumentInfo";
 import { useDispatch, useSelector } from "react-redux";
 import type { Instrument } from "../../redux/types";
-import { setSelectedInstrument } from "../../redux/services/instrumentSlice";
+import {
+  setSelectedInstrument,
+  useGetCandlestickDataQuery,
+  useGetInstrumentsQuery,
+} from "../../redux/services";
 import type { RootState } from "../../redux/store";
 import CandlestickChart from "./CandlestickChart";
-import { useDefaultInstrument } from "../../hooks/useDefaultInstrument";
 
 const Wrapper = styled.div`
   font-family: poppins, sans-serif;

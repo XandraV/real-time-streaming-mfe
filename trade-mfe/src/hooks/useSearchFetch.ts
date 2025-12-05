@@ -34,7 +34,7 @@ export const useSearchFetch = ({ searchString }: FetchType) => {
           setError("error");
         }
       })
-      .catch((err: any) => {
+      .catch(() => {
         setError("Unknown error.");
       })
       .finally(() => {

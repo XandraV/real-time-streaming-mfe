@@ -3,14 +3,14 @@ import { webSocket } from "rxjs/webSocket";
 import { map, tap } from "rxjs/operators";
 import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
-import type { RowsMap, Trade } from "../types";
+import type { RowsMap, Instrument } from "../types";
 
 const WS_URL = import.meta.env.VITE_WS_URL;
 /**
  * Streams trade data over WebSocket and calls onTrades() with new batches.
  * Emits an array of trades each time new data arrives.
  */
-const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
+export const useTradeStreamRx = (onTrades?: (trades: Instrument[]) => void) => {
   useEffect(() => {
     let subscription: any;
 
@@ -32,7 +32,7 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
             enums: String,
             bytes: String,
           }) as any;
-          return trades as Trade[];
+          return trades as Instrument[];
         }),
         tap((trades) => {
           // update local snapshot
@@ -46,7 +46,7 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
       );
 
       subscription = stream$.subscribe({
-        next: (trades: Trade[]) => {
+        next: (trades: Instrument[]) => {
           onTrades?.(trades);
         },
         error: (err) => console.error("WebSocket error", err),
@@ -59,4 +59,3 @@ const useTradeStreamRx = (onTrades?: (trades: Trade[]) => void) => {
   }, [onTrades]);
 };
 
-export default useTradeStreamRx;

@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { Instrument } from "../redux/types";
-import { useGetInstrumentsQuery } from "../redux/services/instrumentSearchApi";
-import { setSelectedInstrument } from "../redux/services/instrumentSlice";
+import {
+  setSelectedInstrument,
+  useGetInstrumentsQuery,
+} from "../redux/services";
 import type { RootState } from "../redux/store";
 
 /**
  * Hook to automatically select a default instrument if none is selected.
- * @param defaultTicker The ticker to use as default (e.g., "AAPL")
+ * @param defaultTicker The ticker to use as default ("AAPL")
  * @returns selectedInstrument
  */
 export const useDefaultInstrument = (
