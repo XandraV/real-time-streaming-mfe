@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-const size = 60;
+const size = 45;
 
 const DollarLogo = () => (
   <motion.svg
