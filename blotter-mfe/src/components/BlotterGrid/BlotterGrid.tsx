@@ -8,25 +8,26 @@ import {
   themeAlpine,
   colorSchemeDarkBlue,
 } from "ag-grid-community";
-import { colDefs, defaultColDef } from "./columnDef";
+import { useBlotterColumns } from "./useBlotterColumns";
 import { StyledWrapper } from "./StyledWrapper";
 import type { Trade } from "../../types";
 import React from "react";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 type BlotterGridProps = {
-  data: any[];
+  data: Trade[];
 };
 
 const BlotterGrid = ({ data }: BlotterGridProps) => {
   const gridRef = useRef<AgGridReact<Trade>>(null);
+  const { colDefs, defaultColDef } = useBlotterColumns();
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams<Trade>) => ticker,
     []
   );
 
-  const myTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
+  const blotterTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
     valueChangeValueHighlightBackgroundColor: "#823fcaa0",
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
@@ -37,7 +38,7 @@ const BlotterGrid = ({ data }: BlotterGridProps) => {
     <StyledWrapper>
       <AgGridReact<Trade>
         ref={gridRef}
-        theme={myTheme}
+        theme={blotterTheme}
         getRowId={getRowId}
         rowData={data}
         columnDefs={colDefs}

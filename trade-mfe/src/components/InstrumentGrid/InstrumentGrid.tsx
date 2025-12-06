@@ -10,7 +10,7 @@ import {
   type RowDoubleClickedEvent,
 } from "ag-grid-community";
 import { useTradeStreamRx } from "../../hooks";
-import { colDefs, defaultColDef } from "./columnDef";
+import { useInstrumentColumns } from "./useInstrumentColumns";
 import { StyledWrapper } from "./StyledWrapper";
 import type { Instrument } from "../../types";
 import React from "react";
@@ -25,6 +25,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const InstrumentGrid = () => {
   const dispatch = useDispatch();
   const gridRef = useRef<AgGridReact<Instrument>>(null);
+  const { colDefs, defaultColDef } = useInstrumentColumns();
   const isInitialLoad = useRef(true);
   const [fetchInstrument] = useLazyGetInstrumentsQuery();
   const [rowData, setRowData] = useState<Instrument[]>([]);
@@ -64,7 +65,7 @@ const InstrumentGrid = () => {
     []
   );
 
-  const myTheme2 = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
+  const instrumentTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
     valueChangeValueHighlightBackgroundColor: "#823fcaa0",
     valueChangeDeltaDownColor: "rgb(255, 0, 92)",
     valueChangeDeltaUpColor: "rgb(53, 182, 90)",
@@ -75,7 +76,7 @@ const InstrumentGrid = () => {
     <StyledWrapper>
       <AgGridReact<Instrument>
         ref={gridRef}
-        theme={myTheme2}
+        theme={instrumentTheme}
         getRowId={getRowId}
         rowData={rowData} // start empty
         columnDefs={colDefs}
