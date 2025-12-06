@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DollarLogo from "./DollarLogo";
 import { AccountSelector, type Account } from "./AccountSelector";
 import { useState } from "react";
+import { accounts } from "../config/accounts";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -91,23 +92,7 @@ const TitleArea = styled.div`
   left: 10px;
 `;
 
-const accounts = [
-  {
-    name: "Account 1",
-    id: "U19873141",
-    currency: "GBP",
-    balance: "10,494.74",
-    buyingPower: "7,534.62",
-  },
-  {
-    name: "Account 2",
-    id: "U15331401",
-    currency: "GBP",
-    balance: "21,494.74",
-    buyingPower: "11,712.33",
-  },
-];
-const NavMenu = () => {
+const Header = () => {
   const location = useLocation();
   const currentPage = location.pathname.split("/")[1] || "dashboard";
   const [selectedAccount, setSelectedAccount] = useState<Account>(accounts[0]);
@@ -166,4 +151,4 @@ const NavMenu = () => {
   );
 };
 
-export default NavMenu;
+export default Header;
