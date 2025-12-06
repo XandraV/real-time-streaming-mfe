@@ -1,7 +1,18 @@
 import { data } from "../data/data";
 
+type Trade = {
+  ticker: string;
+  name: string;
+  instrument: string;
+  quantity: number;
+  price: number;
+  purchasePrice: number;
+  status: string;
+  timestamp: string;
+};
+
 export const blotterService = {
-  generateBlotter() {
+  generateBlotter(): Trade[] {
     const numRows = 5 + Math.floor(Math.random() * 2); // 5–10
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
