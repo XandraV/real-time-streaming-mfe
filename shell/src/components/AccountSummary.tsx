@@ -10,44 +10,46 @@ interface AccountSummaryProps {
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-  row-gap: 4px;
-  column-gap: 24px;
+  grid-template-rows: 1fr 1fr;
+  row-gap: 2px;
+  column-gap: 12px;
   align-items: center;
   font-family: "Inter", sans-serif;
   color: white;
-  padding: 12px 0;
+  padding: 6px 4px;
+  font-size: 10px;
+  width: 180px;
 `;
 
 const Title = styled.div`
-  font-size: 16px;
+  font-size: 10px;
   font-weight: 600;
 `;
 
 const AccountId = styled.div`
-  font-size: 14px;
+  font-size: 10px;
   opacity: 0.7;
 `;
 
 const Balance = styled.div`
-  font-size: 20px;
+  font-size: 11px;
   font-weight: 600;
   text-align: right;
 
   span.currency {
-    font-size: 14px;
+    font-size: 9px;
     opacity: 0.7;
-    margin-right: 4px;
+    margin-right: 2px;
   }
 `;
 
 const BuyingPowerWrapper = styled.div`
   text-align: right;
-  font-size: 14px;
+  font-size: 10px;
 
   .label {
     opacity: 0.6;
-    margin-right: 6px;
+    margin-right: 4px;
   }
 
   .value {
@@ -64,14 +66,11 @@ export default function AccountSummary({
   return (
     <Wrapper>
       <Title>Account</Title>
-
       <Balance>
         <span className="currency">{currency}</span>
         {balance}
       </Balance>
-
       <AccountId>{accountId}</AccountId>
-
       <BuyingPowerWrapper>
         <span className="label">Buying Power</span>
         <span className="value">{buyingPower}</span>
