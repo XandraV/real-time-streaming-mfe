@@ -1,4 +1,4 @@
-import { generateDailyCandles } from "../utils/utils";
+import { generateDailyCandles } from "../utils/generateDailyCandles";
 
 export const candlesService = {
   getCandles() {
