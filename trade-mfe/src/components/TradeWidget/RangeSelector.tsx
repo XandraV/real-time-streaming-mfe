@@ -14,15 +14,16 @@ const Container = styled.div`
 
 const RangeButton = styled.button<{ active: boolean }>`
   padding: 5px;
-  background: ${(props) => (props.active ? "#5d5dc8" : "rgb(43 43 94)")};
-  border: 1px solid rgb(69 95 178);
+  background: ${(props) => (props.active ? "#66b2ff" : "#111729")};
+  border: 1px solid #38406a;
   border-radius: 6px;
   color: white;
   cursor: pointer;
   font-size: 12px;
+  transition: 0.15s ease;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.85;
   }
 `;
 

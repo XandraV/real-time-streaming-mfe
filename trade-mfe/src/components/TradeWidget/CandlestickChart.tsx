@@ -47,6 +47,7 @@ export default function CandlestickChart({
         fixLeftEdge: true,
         fixRightEdge: true,
       },
+      localization: { locale: "en-US" },
     });
 
     chartRef.current = chart;
