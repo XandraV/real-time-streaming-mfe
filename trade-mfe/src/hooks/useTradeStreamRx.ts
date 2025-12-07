@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { webSocket } from "rxjs/webSocket";
-import { map, tap } from "rxjs/operators";
+import { map, retry, tap } from "rxjs/operators";
+import { Subscription, timer } from "rxjs";
 import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
 import type { RowsMap, Instrument } from "../types";
@@ -12,7 +13,7 @@ const WS_URL = import.meta.env.VITE_WS_URL;
  */
 export const useTradeStreamRx = (onTrades?: (trades: Instrument[]) => void) => {
   useEffect(() => {
-    let subscription: any;
+    let subscription: Subscription;
 
     protobuf.load(tradeProtoUrl).then((root) => {
       const tradeBatchType = root.lookupType("TradeBatch");
@@ -31,7 +32,7 @@ export const useTradeStreamRx = (onTrades?: (trades: Instrument[]) => void) => {
             longs: String,
             enums: String,
             bytes: String,
-          }) as any;
+          });
           return trades as Instrument[];
         }),
         tap((trades) => {
@@ -42,7 +43,20 @@ export const useTradeStreamRx = (onTrades?: (trades: Instrument[]) => void) => {
         // Throttle updates
         // throttleTime(300, undefined, { leading: true, trailing: true }),
 
-        map(() => Object.values(rowsRef))
+        map(() => Object.values(rowsRef)),
+
+        retry({
+          count: 5, // maximum attempts to retry connect
+          delay: (_, attempt) => {
+            const timeout = Math.min(30000, 1000 * 2 ** attempt);
+            console.warn(
+              `[WS] disconnected — retrying in ${timeout / 1000}s (attempt ${
+                attempt + 1
+              })`
+            );
+            return timer(timeout);
+          },
+        })
       );
 
       subscription = stream$.subscribe({
@@ -58,4 +72,3 @@ export const useTradeStreamRx = (onTrades?: (trades: Instrument[]) => void) => {
     };
   }, [onTrades]);
 };
-
