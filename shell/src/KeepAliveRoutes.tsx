@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 
 import RemoteTradeApp from "trade/TradeApp";
-import RemotePortfolioApp from "portfolio/PortfolioApp";
+// import RemotePortfolioApp from "portfolio/PortfolioApp";
 const RemoteBlotterApp = React.lazy(() => import("blotter/BlotterApp"));
 
 const RouteContainer = styled.div<{ show: boolean }>`
@@ -16,14 +16,14 @@ function KeepAliveRoutes() {
   const { pathname } = useLocation();
 
   return (
-    <div>
+    <>
       <RouteContainer show={pathname === "/trade"}>
         <RemoteTradeApp />
         <RemoteBlotterApp />
       </RouteContainer>
 
       <RouteContainer show={pathname === "/portfolio"}>
-        <RemotePortfolioApp />
+        <h2>Welcome to the Portfolio App</h2>
       </RouteContainer>
 
       <RouteContainer show={pathname === "/watchlist"}>
@@ -33,7 +33,7 @@ function KeepAliveRoutes() {
       <RouteContainer show={pathname === "/dashboard"}>
         <h2>Welcome to Dashboard App</h2>
       </RouteContainer>
-    </div>
+    </>
   );
 }
 
