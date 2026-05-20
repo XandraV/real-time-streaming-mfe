@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
   AllCommunityModule,
@@ -9,7 +9,7 @@ import {
   colorSchemeDarkBlue,
   type RowDoubleClickedEvent,
 } from "ag-grid-community";
-import { useTradeStreamRx } from "../../hooks";
+import { tradesUpdateStream$ } from "../../redux/tradesUpdateStream";
 import { useInstrumentColumns } from "./useInstrumentColumns";
 import { StyledWrapper } from "./StyledWrapper";
 import type { Instrument } from "../../types";
@@ -30,19 +30,22 @@ const InstrumentGrid = () => {
   const [fetchInstrument] = useLazyGetInstrumentsQuery();
   const [rowData, setRowData] = useState<Instrument[]>([]);
 
-  const onTrade = useCallback((trades: Instrument[]) => {
-    const api = gridRef.current?.api;
-    if (!api) return;
+  // Subscribe to the trade stream
+  useEffect(() => {
+    const subscription = tradesUpdateStream$.subscribe((trades) => {
+      const api = gridRef.current?.api;
+      if (!api) return;
+      console.log("++", trades);
+      if (isInitialLoad.current) {
+        setRowData(trades);
+        isInitialLoad.current = false;
+      } else {
+        api.applyTransactionAsync({ update: trades });
+      }
+    });
 
-    if (isInitialLoad.current) {
-      setRowData(trades);
-      isInitialLoad.current = false;
-    } else {
-      api.applyTransactionAsync({ update: trades });
-    }
+    return () => subscription.unsubscribe();
   }, []);
-  // Subscribe to WebSocket trade updates
-  useTradeStreamRx(onTrade);
 
   const handleRowDoubleClick = useCallback(
     (event: RowDoubleClickedEvent<Instrument>) => {
@@ -57,12 +60,12 @@ const InstrumentGrid = () => {
           }
         });
     },
-    [dispatch, fetchInstrument]
+    [dispatch, fetchInstrument],
   );
 
   const getRowId = useCallback<GetRowIdFunc>(
     ({ data: { ticker } }: GetRowIdParams<Instrument>) => ticker,
-    []
+    [],
   );
 
   const instrumentTheme = themeAlpine.withPart(colorSchemeDarkBlue).withParams({
@@ -78,7 +81,7 @@ const InstrumentGrid = () => {
         ref={gridRef}
         theme={instrumentTheme}
         getRowId={getRowId}
-        rowData={rowData} // start empty
+        rowData={rowData}
         columnDefs={colDefs}
         defaultColDef={defaultColDef}
         rowHeight={30}

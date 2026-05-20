@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { instrumentSearchApi } from "./services/instrumentSearchApi";
 import { candlestickDataApi } from "./services/candlestickDataApi";
 import instrumentReducer from "./services/instrumentSlice";
+import { tradesListenerMiddleware } from "./tradesMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -10,10 +11,9 @@ export const store = configureStore({
     [candlestickDataApi.reducerPath]: candlestickDataApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      instrumentSearchApi.middleware,
-      candlestickDataApi.middleware
-    ),
+    getDefaultMiddleware()
+      .prepend(tradesListenerMiddleware.middleware)
+      .concat(instrumentSearchApi.middleware, candlestickDataApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

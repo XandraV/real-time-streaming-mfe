@@ -1,11 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Instrument } from "../types";
+import type { Instrument } from "../../types";
 
 interface InstrumentsState {
   selectedInstrument: Instrument | null;
+  tradeUpdates: Instrument[];
 }
 
-const initialState: InstrumentsState = { selectedInstrument: null };
+const initialState: InstrumentsState = {
+  selectedInstrument: null,
+  tradeUpdates: [],
+};
 
 export const instrumentSlice = createSlice({
   name: "instruments",
@@ -14,8 +18,11 @@ export const instrumentSlice = createSlice({
     setSelectedInstrument: (state, action: PayloadAction<Instrument>) => {
       state.selectedInstrument = action.payload;
     },
+    updateTrades: (state, action: PayloadAction<Instrument[]>) => {
+      state.tradeUpdates = action.payload;
+    },
   },
 });
 
-export const { setSelectedInstrument } = instrumentSlice.actions;
+export const { setSelectedInstrument, updateTrades } = instrumentSlice.actions;
 export default instrumentSlice.reducer;
