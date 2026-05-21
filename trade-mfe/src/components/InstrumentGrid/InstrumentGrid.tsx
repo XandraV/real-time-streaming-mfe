@@ -35,7 +35,6 @@ const InstrumentGrid = () => {
     const subscription = tradesUpdateStream$.subscribe((trades) => {
       const api = gridRef.current?.api;
       if (!api) return;
-      console.log("++", trades);
       if (isInitialLoad.current) {
         setRowData(trades);
         isInitialLoad.current = false;
