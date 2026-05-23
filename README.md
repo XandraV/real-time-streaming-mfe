@@ -16,7 +16,7 @@ This project implements a **Micro-Frontend (MFE) architecture** using **Module F
 - **📈 Portfolio MFE** (Port 5001): Portfolio management placegolder (in development)
 - **🔌 Mock WebSocket Server** (Port 4000): Backend simulation with real-time data
 
-## ✨ Key Features
+## Features
 
 ### Real-Time Data Streaming
 
@@ -36,7 +36,7 @@ This project implements a **Micro-Frontend (MFE) architecture** using **Module F
 - **Market Data Grid**: Live instrument data with sorting and filtering
 - **Trade Blotter**: Real-time position and execution monitoring
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -76,8 +76,6 @@ real-time-streaming-mfe/
 └── package.json             # Workspace configuration
 ```
 
-## 🔧 Technology Stack
-
 ### Frontend Framework
 
 - **React 19**
@@ -104,7 +102,7 @@ real-time-streaming-mfe/
 - **ESLint** - Code linting and formatting
 - **Module Federation** - Micro-frontend architecture
 
-## 🌐 Ports and Endpoints
+## Ports and Endpoints
 
 | Service       | Port | Purpose                    |
 | ------------- | ---- | -------------------------- |
@@ -126,7 +124,7 @@ real-time-streaming-mfe/
 - `GET /candles?searchString=<ticker>` - Historical price data
 - `GET /blotter` - Trade blotter data
 
-## 📊 Performance
+## Performance
 
 - **Code Splitting**: Automatic code splitting with dynamic imports
 - **Bundle Optimization**: Shared dependencies reduce bundle sizes
