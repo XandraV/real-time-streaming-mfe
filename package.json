@@ -22,7 +22,7 @@
     "ws": "^8.18.2"
   },
   "devDependencies": {
-    "@esbuild/darwin-arm64": "0.25.5",
+    "esbuild": "*",
     "@types/node": "^24.0.3",
     "@types/styled-components": "^5.1.36",
     "@types/ws": "^8.18.1",
