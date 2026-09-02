@@ -4,17 +4,17 @@ A financial trading platform built with micro-frontend architecture with real-ti
 
 ![Demo GIF](./demo.gif)
 
-## 🏗️ Architecture Overview
+## Overview
 
 This project implements a **Micro-Frontend (MFE) architecture** using **Module Federation** to create a system that consists of independent frontend applications providing a unified trading experience.
 
 ### Core Components
 
-- **🖥️ Shell App** (Port 8000): Main container application with navigation
-- **📊 Trade MFE** (Port 5002): Trading interface with charts and instrument display
-- **📋 Blotter MFE** (Port 5003): Trade blotter and position display
-- **📈 Portfolio MFE** (Port 5001): Portfolio management placegolder (in development)
-- **🔌 Mock WebSocket Server** (Port 4000): Backend simulation with real-time data
+- **Shell App** (Port 8000): Main container application with navigation
+- **Trade MFE** (Port 5002): Trading interface with charts and instrument display
+- **Blotter MFE** (Port 5003): Trade blotter and position display
+- **Portfolio MFE** (Port 5001): Portfolio management placegolder (in development)
+- **Mock WebSocket Server** (Port 4000): Backend simulation with real-time data
 
 ## Features
 
