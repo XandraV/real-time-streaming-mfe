@@ -12,7 +12,7 @@ import {
 import { tradesUpdateStream$ } from "../../redux/tradesUpdateStream";
 import { useInstrumentColumns } from "./useInstrumentColumns";
 import { StyledWrapper } from "./StyledWrapper";
-import type { Instrument } from "../../types";
+import type { InstrumentGridRow } from "../../types";
 import React from "react";
 import {
   setSelectedInstrument,
@@ -24,11 +24,11 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const InstrumentGrid = () => {
   const dispatch = useDispatch();
-  const gridRef = useRef<AgGridReact<Instrument>>(null);
+  const gridRef = useRef<AgGridReact<InstrumentGridRow>>(null);
   const { colDefs, defaultColDef } = useInstrumentColumns();
   const isInitialLoad = useRef(true);
   const [fetchInstrument] = useLazyGetInstrumentsQuery();
-  const [rowData, setRowData] = useState<Instrument[]>([]);
+  const [rowData, setRowData] = useState<InstrumentGridRow[]>([]);
 
   // Subscribe to the trade stream
   useEffect(() => {
@@ -47,7 +47,7 @@ const InstrumentGrid = () => {
   }, []);
 
   const handleRowDoubleClick = useCallback(
-    (event: RowDoubleClickedEvent<Instrument>) => {
+    (event: RowDoubleClickedEvent<InstrumentGridRow>) => {
       const ticker = event.data?.ticker;
       if (!ticker) return;
 
@@ -62,8 +62,8 @@ const InstrumentGrid = () => {
     [dispatch, fetchInstrument],
   );
 
-  const getRowId = useCallback<GetRowIdFunc>(
-    ({ data: { ticker } }: GetRowIdParams<Instrument>) => ticker,
+  const getRowId = useCallback<GetRowIdFunc<InstrumentGridRow>>(
+    ({ data: { ticker } }: GetRowIdParams<InstrumentGridRow>) => ticker,
     [],
   );
 
@@ -76,7 +76,7 @@ const InstrumentGrid = () => {
 
   return (
     <StyledWrapper>
-      <AgGridReact<Instrument>
+      <AgGridReact<InstrumentGridRow>
         ref={gridRef}
         theme={instrumentTheme}
         getRowId={getRowId}

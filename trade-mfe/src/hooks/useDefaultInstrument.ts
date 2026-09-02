@@ -13,16 +13,16 @@ import type { RootState } from "../redux/store";
  * @returns selectedInstrument
  */
 export const useDefaultInstrument = (
-  defaultTicker: string = "AAPL"
+  defaultTicker: string = "AAPL",
 ): Instrument | null => {
   const dispatch = useDispatch();
   const selectedInstrument = useSelector(
-    (state: RootState) => state.instruments.selectedInstrument
+    (state: RootState) => state.instruments.selectedInstrument,
   );
 
   const { data: defaultInstrumentData } = useGetInstrumentsQuery(
     { searchString: defaultTicker },
-    { skip: !!selectedInstrument } // skip if already selected
+    { skip: !!selectedInstrument }, // skip if already selected
   );
 
   useEffect(() => {

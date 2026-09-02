@@ -1,9 +1,10 @@
-import { Subject } from "rxjs";
-import type { Instrument } from "../types";
+import { ReplaySubject } from "rxjs";
+import type { InstrumentGridRow } from "../types";
 
-// shared Subject for trade updates
-export const tradesUpdateStream$ = new Subject<Instrument[]>();
+// Replay the last full snapshot to late subscribers so a grid that mounts
+// after the initial WS message still receives the seed data.
+export const tradesUpdateStream$ = new ReplaySubject<InstrumentGridRow[]>(1);
 
-export const publishTradesUpdate = (trades: Instrument[]) => {
+export const publishTradesUpdate = (trades: InstrumentGridRow[]) => {
   tradesUpdateStream$.next(trades);
 };

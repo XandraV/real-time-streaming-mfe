@@ -24,29 +24,38 @@ protobuf.load(path.resolve(__dirname, "./trade.proto"), (err, maybeRoot) => {
     // send the entire dataset once on initial connection
     const fullMessage = TradeBatch.create({ trades: data });
     const fullBuffer = TradeBatch.encode(fullMessage).finish();
+    console.log(
+      `Initial send: ${data.length} instruments, ${fullBuffer.length} bytes`,
+    );
     ws.send(fullBuffer);
 
     const interval = setInterval(() => {
-      const count = Math.floor(3 + Math.random() * 20);
-      const updates = Array.from({ length: count }).map(() => {
-        const row = data[Math.floor(Math.random() * data.length)];
-        return {
-          ...row,
-          quantity: +(100 + Math.random() * 10).toFixed(2),
-          price: +(100 + Math.random() * 100).toFixed(2),
-          purchasePrice: +(Math.random() * 500).toFixed(2),
-        };
-      });
+      // Pick a unique random subset of instruments to update this tick.
+      const count = Math.min(data.length, Math.floor(3 + Math.random() * 10));
+      const pool = [...data];
+      const picked: typeof data = [];
+      for (let i = 0; i < count; i++) {
+        const idx = Math.floor(Math.random() * pool.length);
+        picked.push(pool[idx]);
+        pool.splice(idx, 1);
+      }
+
+      const updates = picked.map((row) => ({
+        ...row,
+        quantity: +(100 + Math.random() * 10).toFixed(2),
+        price: +(100 + Math.random() * 100).toFixed(2),
+        purchasePrice: +(Math.random() * 500).toFixed(2),
+      }));
 
       const message = TradeBatch.create({ trades: updates });
       const buffer = TradeBatch.encode(message).finish();
 
       ws.send(buffer);
-    }, 1000);
+    }, 500);
 
     ws.on("close", () => {
       clearInterval(interval);
-      console.log("❌ Client disconnected");
+      console.log("❌ Client connected"); // Note: "Client disconnected" in logic
     });
   });
 });

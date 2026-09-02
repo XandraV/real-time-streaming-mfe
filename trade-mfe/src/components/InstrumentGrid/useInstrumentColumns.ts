@@ -5,28 +5,30 @@ import {
   type ValueGetterParams,
 } from "ag-grid-community";
 import { TickerCellRenderer } from "./TickerCellRenderer";
+import type { InstrumentGridRow } from "../../types";
 
 export const useInstrumentColumns = () => {
-  const numberFormatter: ValueFormatterFunc = useMemo(
-    () => ({ value }) => {
-      const formatter = new Intl.NumberFormat("en-US", {
-        style: "decimal",
-        maximumFractionDigits: 2,
-      });
-      return value == null ? "" : formatter.format(value);
-    },
-    []
+  const numberFormatter: ValueFormatterFunc<InstrumentGridRow> = useMemo(
+    () =>
+      ({ value }) => {
+        const formatter = new Intl.NumberFormat("en-US", {
+          style: "decimal",
+          maximumFractionDigits: 2,
+        });
+        return value == null ? "" : formatter.format(value);
+      },
+    [],
   );
 
-  const defaultColDef: ColDef = useMemo(
+  const defaultColDef: ColDef<InstrumentGridRow> = useMemo(
     () => ({
       flex: 1,
       filter: true,
     }),
-    []
+    [],
   );
 
-  const colDefs: ColDef[] = useMemo(
+  const colDefs: ColDef<InstrumentGridRow>[] = useMemo(
     () => [
       {
         field: "ticker",
@@ -51,8 +53,8 @@ export const useInstrumentColumns = () => {
         filter: "agNumberColumnFilter",
         type: "rightAligned",
         cellRenderer: "agAnimateShowChangeCellRenderer",
-        valueGetter: ({ data }: ValueGetterParams) =>
-          data && data.quantity * (data.price / data.purchasePrice),
+        valueGetter: ({ data }: ValueGetterParams<InstrumentGridRow>) =>
+          data && data.quantity * (data.price - data.purchasePrice),
         valueFormatter: numberFormatter,
         minWidth: 200,
       },
@@ -62,14 +64,14 @@ export const useInstrumentColumns = () => {
         type: "rightAligned",
         cellDataType: "number",
         filter: "agNumberColumnFilter",
-        valueGetter: ({ data }: ValueGetterParams) =>
+        valueGetter: ({ data }: ValueGetterParams<InstrumentGridRow>) =>
           data && data.quantity * data.price,
         cellRenderer: "agAnimateShowChangeCellRenderer",
         valueFormatter: numberFormatter,
         minWidth: 210,
       },
     ],
-    [numberFormatter]
+    [numberFormatter],
   );
 
   return { colDefs, defaultColDef };

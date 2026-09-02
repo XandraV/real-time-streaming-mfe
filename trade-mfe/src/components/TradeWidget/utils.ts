@@ -1,7 +1,4 @@
-import {
-  type CandlestickData,
-} from "lightweight-charts";
-
+import { type CandlestickData } from "lightweight-charts";
 export function generateDailyCandles(year: number): CandlestickData[] {
   const candles: CandlestickData[] = [];
 
@@ -13,7 +10,7 @@ export function generateDailyCandles(year: number): CandlestickData[] {
 
     for (let day = 1; day <= daysInMonth; day++) {
       const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
-        day
+        day,
       ).padStart(2, "0")}`;
 
       const open = currentPrice;
@@ -36,6 +33,5 @@ export function generateDailyCandles(year: number): CandlestickData[] {
       });
     }
   }
-
   return candles;
 }

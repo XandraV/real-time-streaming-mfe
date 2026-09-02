@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import type { Instrument } from "../../redux/types";
 
 type SearchInputProps = {
@@ -34,10 +34,6 @@ const Input = styled.input`
   color: #ffffff;
   font-size: 14px;
   flex: 1;
-
-  &::placeholder {
-    color: #9ba1ac;
-  }
 `;
 
 const Dropdown = styled.div`
@@ -94,7 +90,8 @@ export default function InstrumentSearch({
 }: SearchInputProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const onClickOutside = () => setOpen(false);
+  const onClickOutside = useCallback(() => setOpen(false), []);
+
   // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -103,8 +100,8 @@ export default function InstrumentSearch({
       }
     }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [onClickOutside]);
+    return () => document.removeEventListener("down", handleClick);
+  }, []);
 
   return (
     <Wrapper ref={wrapperRef}>

@@ -6,7 +6,7 @@ import protobuf from "protobufjs";
 import tradeProtoUrl from "../proto/trade.proto?url";
 import { updateTrades } from "./services/instrumentSlice";
 import { publishTradesUpdate } from "./tradesUpdateStream";
-import type { Instrument, RowsMap } from "../types";
+import type { InstrumentGridRow, RowsMap } from "../types";
 
 const WS_URL = import.meta.env.VITE_WS_URL;
 
@@ -37,10 +37,12 @@ tradesListenerMiddleware.startListening({
             enums: String,
             bytes: String,
           });
-          return trades as Instrument[];
+          return trades as InstrumentGridRow[];
         }),
         tap((trades) => {
-          rowsRef = {};
+          // Accumulate: initial WS message seeds all rows; subsequent ticks
+          // overwrite only the tickers that changed. Emitting the full state
+          // means late subscribers (and the ReplaySubject) always see every row.
           trades.forEach((t) => (rowsRef[t.ticker] = t));
         }),
         map(() => Object.values(rowsRef)),
@@ -49,7 +51,7 @@ tradesListenerMiddleware.startListening({
           delay: (_, attempt) => {
             const timeout = Math.min(30000, 1000 * 2 ** attempt);
             console.warn(
-              `[WS] disconnected — retrying in ${timeout / 1000}s (attempt ${
+              `[WS] disconnected – retrying in ${timeout / 1000}s (attempt ${
                 attempt + 1
               })`,
             );
@@ -59,7 +61,7 @@ tradesListenerMiddleware.startListening({
       );
 
       subscription = stream$.subscribe({
-        next: (trades: Instrument[]) => {
+        next: (trades: InstrumentGridRow[]) => {
           dispatch(updateTrades(trades));
           publishTradesUpdate(trades);
         },

@@ -36,7 +36,7 @@ function TradeWidget() {
   const dispatch = useDispatch();
   useDefaultInstrument();
   const selectedInstrument = useSelector(
-    (state: RootState) => state.instruments.selectedInstrument
+    (state: RootState) => state.instruments.selectedInstrument,
   );
   const [searchString, setSearchString] = useState("");
   const debouncedSearchString = useDebounce(searchString, 1000);
@@ -68,7 +68,6 @@ function TradeWidget() {
         {selectedInstrument && (
           <InstrumentInfo selectedInstrument={selectedInstrument} />
         )}
-
         <InstrumentSearch
           value={searchString}
           onChange={handleChange}

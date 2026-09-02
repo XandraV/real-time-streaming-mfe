@@ -6,7 +6,6 @@ export const StyledWrapper = styled.div`
   .ag-row {
     --ag-row-hover-color: #323a46;
   }
-
   .ag-value-change-value,
   .ag-value-change-value-highlight {
     padding-left: 6px;
@@ -16,6 +15,7 @@ export const StyledWrapper = styled.div`
     border-radius: 12px;
     margin-left: 4px;
   }
+
   .ag-right-aligned-cell {
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.01em;

@@ -59,6 +59,7 @@ import EONGY from "../../assets/EONGY.png";
 import TWTR from "../../assets/TWTR.png";
 import HON from "../../assets/HON.png";
 import USB2025 from "../../assets/USB2025.png";
+import styled from "styled-components";
 
 const images: Record<string, string> = {
   GOOGL,
@@ -124,30 +125,34 @@ const images: Record<string, string> = {
 };
 
 export function TradeLogo({ ticker }: { ticker: string }) {
+  const src = images[ticker];
+  if (!src) {
+    return <div style={{ width: 20, height: 20 }} aria-label={ticker} />;
+  }
   return (
     <img
-      src={images[ticker]}
+      src={src}
       alt={ticker}
       width={20}
       height={20}
-      style={{ borderRadius: 32 }}
+      style={{ borderRadius: 32, objectFit: "contain", flexShrink: 0 }}
     />
   );
 }
 
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
 export const TickerCellRenderer = ({ data }: CustomCellRendererProps) => {
   return (
     data && (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-        }}
-      >
+      <StyledWrapper>
         <TradeLogo ticker={data.ticker} />{" "}
         <b className="custom-ticker">{data.ticker}</b>
-      </div>
+      </StyledWrapper>
     )
   );
 };

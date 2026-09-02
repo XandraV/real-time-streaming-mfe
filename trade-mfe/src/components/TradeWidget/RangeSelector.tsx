@@ -12,9 +12,9 @@ const Container = styled.div`
   gap: 4px;
 `;
 
-const RangeButton = styled.button<{ active: boolean }>`
+const RangeButton = styled.button<{ $active: boolean }>`
   padding: 5px;
-  background: ${(props) => (props.active ? "#66b2ff" : "#111729")};
+  background: ${(props) => (props.$active ? "#66b2ff" : "#111729")};
   border: 1px solid #38406a;
   border-radius: 6px;
   color: white;
@@ -35,7 +35,7 @@ export default function RangeSelector({ range, setRange }: RangeSelectorProps) {
       {ranges.map((r) => (
         <RangeButton
           key={r}
-          active={range === r}
+          $active={range === r}
           onClick={() => setRange(r)}
           aria-pressed={range === r}
         >
